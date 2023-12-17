@@ -13,7 +13,7 @@ def create_surface_text(text, font_size, text_color, surface_color):
 
 # Class to make UI buttons
 class UIButton(Sprite):
-    def __init__(self, center_position, text, font_size, surface_color, text_color, action=None):
+    def __init__(self, center_position, text, font_size, surface_color, text_color):
         
         super().__init__()
         
@@ -26,8 +26,6 @@ class UIButton(Sprite):
         self.images = [default, highlighted]
         self.rects = [default.get_rect(center=center_position), highlighted.get_rect(center=center_position)]
         
-        self.action = action
-    
     @property
     def image(self):
         return self.images[1] if self.mouse_over else self.images[0]
@@ -36,13 +34,17 @@ class UIButton(Sprite):
     def rect(self):
         return self.rects[1] if self.mouse_over else self.rects[0]
     
-    def update(self, mouse_pos, mouse_up):
+    def update(self, mouse_pos):
         if self.rect.collidepoint(mouse_pos):
             self.mouse_over = True
-            if mouse_up:
-                return self.action
         else:
             self.mouse_over = False
+    
+    def clicked(self,mouse_pos, mouse_up):
+        if self.rect.collidepoint(mouse_pos) and mouse_up:
+            return True
+        else:
+            return False
     
     def draw(self, surface):
         surface.blit(self.image, self.rect)

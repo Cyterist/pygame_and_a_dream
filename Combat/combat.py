@@ -38,43 +38,20 @@ def create_text(text, text_color, font_size, x, y, screen):
 # Creating screens
 
 def create_default_screen(screen):
-    screen.fill(BLUE)
-    village = Character(200, 450, 'villager', 30, 10)
-    creeper = Character(850, 340, 'creeper', 30, 10)
-
-    village_hp = HealthBar(200, SCREEN_HEIGHT - BOTTOM_PANEL + 50, village.hp, village.max_hp)
-    creeper_hp = HealthBar(1000, SCREEN_HEIGHT - BOTTOM_PANEL + 50, creeper.hp, creeper.max_hp)
     pg.draw.rect(screen, BROWN, BATTLE_BAR)
     create_text(f'{village.name} HP: {village.hp}', WHITE, 30, 200, SCREEN_HEIGHT - BOTTOM_PANEL + 10, screen)
     create_text(f'{creeper.name} HP: {creeper.hp}', WHITE, 30, 1000, SCREEN_HEIGHT - BOTTOM_PANEL + 10, screen)
-    attack_btn = UIButton(center_position=(650,608), font_size=30, surface_color=BROWN, text_color=WHITE, text="Attack", action=GameState.ATTACK)
-    
-    while True:
-        mouse_up = False
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                pg.quit()
-            if event.type == pg.MOUSEBUTTONUP and event.button == 1:
-                mouse_up = True
-        
-        attack_btn.draw(screen)
-        village.draw(screen)
-        creeper.draw(screen)
-        village_hp.draw(village.hp, screen)
-        creeper_hp.draw(creeper.hp, screen)
-        
-        pg.display.flip()
 
 
 
 
 # Characters
 
-# village = Character(200, 450, 'villager', 30, 10)
-# creeper = Character(850, 340, 'creeper', 30, 10)
+village = Character(200, 450, 'villager', 30, 5)
+creeper = Character(850, 340, 'creeper', 30, 10)
 
-# village_hp = HealthBar(200, SCREEN_HEIGHT - BOTTOM_PANEL + 50, village.hp, village.max_hp)
-# creeper_hp = HealthBar(1000, SCREEN_HEIGHT - BOTTOM_PANEL + 50, creeper.hp, creeper.max_hp)
+village_hp = HealthBar(200, SCREEN_HEIGHT - BOTTOM_PANEL + 50, village.hp, village.max_hp)
+creeper_hp = HealthBar(1000, SCREEN_HEIGHT - BOTTOM_PANEL + 50, creeper.hp, creeper.max_hp)
 
 # Main game function
 def main():
@@ -82,44 +59,63 @@ def main():
 
     
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    game_state = GameState.DEFAULT
+
+    attack_btn = UIButton(center_position=(650,608), font_size=30, surface_color=BROWN, text_color=WHITE, text="Attack")
     
     while True:
         
-        # global active_char
-        # global cooldown
-        # global wait
-        # global total_char
+        global active_char
+        global cooldown
+        global wait
+        global total_char
 
         clock.tick(FPS)
-        
-        # if village.alive:
-        #     if active_char == 1:
-        #         cooldown += 1
-        #         if cooldown >= wait:
-        #             village.attack(creeper)
-        #             active_char += 1
-        #             cooldown = 0
-        # if active_char == 2:
-        #     if creeper.alive:
-        #         cooldown += 1
-        #         if cooldown >= wait:
-        #             creeper.attack(village)
-        #             active_char += 1
-        #             cooldown = 0
-        #     else:
-        #         active_char += 1
-        # if active_char > total_char:
-        #     active_char = 1
+        screen.fill(BLUE)
 
+        mouse_up = False
+        mouse_pos = pg.mouse.get_pos()
+        
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+            if event.type == pg.MOUSEBUTTONUP and event.button == 1:
+                mouse_up = True
+        
+        #Update Buttons
+        attack_btn.update(mouse_pos)
+
+        #players turn
+        if village.alive:
+            if active_char == 1:
+                create_text("Your Turn", WHITE, 50, 550, 0, screen)
+                if attack_btn.clicked(mouse_pos, mouse_up):
+                    village.attack(creeper)
+                    active_char = 2
+        else:
+            create_text("Game Over", WHITE, 50, 550, 0, screen)
+        
+        #Enemy Turn
+        if creeper.alive:
+            if active_char == 2:
+                create_text("Enemy Turn", WHITE, 50, 550, 0, screen)
+                cooldown +=1
+                if cooldown >= wait:
+                    creeper.attack(village)
+                    active_char = 1
+                    cooldown = 0
+        else:
+            create_text("Victory", WHITE, 50, 550, 0, screen)
+
+    
         
         # Drawing
-        
-        if game_state == GameState.DEFAULT:
-            game_state = create_default_screen(screen)
-        
-        if game_state == GameState.ATTACK:
-            pass
+        create_default_screen(screen)
+        attack_btn.draw(screen)
+        village.draw(screen)
+        creeper.draw(screen)
+        village_hp.draw(village.hp, screen)
+        creeper_hp.draw(creeper.hp, screen)
+        pg.display.flip()
         
 
 if __name__ == "__main__":
