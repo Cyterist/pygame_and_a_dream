@@ -1,6 +1,6 @@
 from UI_Button import *
 from Character import *
-from enum import Enum
+
 
 active_char = 1
 characters = []
@@ -8,6 +8,7 @@ enemies = []
 cooldown = 0
 wait = 100
 attack = False
+
 # Define colors
 BLUE = (0,0,255)
 BROWN = (105, 77, 49)
@@ -15,19 +16,13 @@ WHITE = (255, 255, 255)
 
 
 # Define screen information
-BOTTOM_PANEL = 150
+BOTTOM_PANEL = 200
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 BATTLE_BAR = pg.Rect((0,SCREEN_HEIGHT - BOTTOM_PANEL), (SCREEN_WIDTH,BOTTOM_PANEL))
 FPS = 60
 
 clock = pg.time.Clock()
-
-#Gamestates
-class GameState(Enum):
-    DEFAULT = 0
-    ATTACK = 1
-    FIGHT = 2
 
 #text function v2, cause I can't figure out why the one from UI_button won't work in certain cases
 
@@ -40,29 +35,31 @@ def create_text(text, text_color, font_size, x, y, screen, bgcolor=None):
 
 def create_default_screen(screen):
     pg.draw.rect(screen, BROWN, BATTLE_BAR)
-    create_text(f'{village.name} HP: {village.hp}', WHITE, 30, 200, SCREEN_HEIGHT - BOTTOM_PANEL + 10, screen)
-    create_text(f'{creeper.name} HP: {creeper.hp}', WHITE, 30, 1000, SCREEN_HEIGHT - BOTTOM_PANEL + 10, screen)
-    create_text(f'{creeper2.name} HP: {creeper2.hp}', WHITE, 30, 1000, SCREEN_HEIGHT - BOTTOM_PANEL + 65, screen)
+    create_text(f'{player.name} HP: {player.hp}', WHITE, 30, 200, SCREEN_HEIGHT - BOTTOM_PANEL + 15, screen)
+    for i, enemy in enumerate(enemies):
+        create_text(f'{enemy.name} HP: {enemy.hp}', WHITE, 30, 1000, (SCREEN_HEIGHT - BOTTOM_PANEL + 15) + i * 60, screen)
 
 
 
 
 # Characters
 
-village = Character(200, 450, 'villager', 30, 5)
-creeper = Character(850, 340, 'creeper', 30, 10)
-creeper2 = Character(1050, 340, 'creeper', 30, 10)
+player = Character(200, 400, 'player', 30, 5)
+creeper = Character(850, 290, 'creeper', 30, 10)
+creeper2 = Character(1050, 290, 'creeper', 30, 10)
 
 
-village_hp = HealthBar(200, SCREEN_HEIGHT - BOTTOM_PANEL + 50, village.hp, village.max_hp)
-creeper_hp = HealthBar(1000, SCREEN_HEIGHT - BOTTOM_PANEL + 50, creeper.hp, creeper.max_hp)
-creeper2_hp = HealthBar(1000, SCREEN_HEIGHT - BOTTOM_PANEL + 100, creeper2.hp, creeper2.max_hp)
+player_hp = HealthBar(200, SCREEN_HEIGHT - BOTTOM_PANEL + 55, player.hp, player.max_hp)
+creeper_hp = HealthBar(1000, SCREEN_HEIGHT - BOTTOM_PANEL + 55, creeper.hp, creeper.max_hp)
+creeper2_hp = HealthBar(1000, SCREEN_HEIGHT - BOTTOM_PANEL + 115, creeper2.hp, creeper2.max_hp)
 
-characters.append(village)
+characters.append(player)
 characters.append(creeper)
 characters.append(creeper2)
 enemies.append(creeper)
 enemies.append(creeper2)
+
+
 # Main game function
 def main():
     pg.init()
@@ -99,20 +96,16 @@ def main():
         attack_btn.update(mouse_pos)
 
         #players turn
-        if village.alive:
+        if player.alive:
             if active_char == 1:
                 create_text("Your Turn", WHITE, 50, 550, 0, screen)
                 if attack_btn.clicked(mouse_pos, mouse_up):
                     attack = True
                 if attack == True:
                     create_text("Select Target", WHITE, 50, 550, 0, screen, BLUE)
-                    # if creeper.rect.collidepoint(mouse_pos) and mouse_up:
-                    #     village.attack(creeper)
-                    #     active_char += 1
-                    #     attack = False
                     for enemy in enemies:
                         if enemy.rect.collidepoint(mouse_pos) and mouse_up:
-                            village.attack(enemy)
+                            player.attack(enemy)
                             active_char += 1
                             attack = False
         
@@ -123,7 +116,7 @@ def main():
                     create_text("Enemy Turn", WHITE, 50, 550, 0, screen)
                     cooldown +=1
                     if cooldown >= wait:
-                        enemy.attack(village)
+                        enemy.attack(player)
                         active_char += 1
                         cooldown = 0
 
@@ -136,10 +129,12 @@ def main():
         # Drawing
         create_default_screen(screen)
         attack_btn.draw(screen)
-        village.draw(screen)
-        creeper.draw(screen)
-        creeper2.draw(screen)
-        village_hp.draw(village.hp, screen)
+        player.draw(screen)
+        
+        for enemy in enemies:
+            enemy.draw(screen)
+        
+        player_hp.draw(player.hp, screen)
         creeper_hp.draw(creeper.hp, screen)
         creeper2_hp.draw(creeper2.hp, screen)
         pg.display.flip()
