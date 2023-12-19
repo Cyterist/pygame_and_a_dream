@@ -1,4 +1,6 @@
-import pygame as pg, sys, os
+import pygame as pg
+import sys
+import os
 
 # Window Information
 pg.display.set_caption('Snowball Chronicles')
@@ -12,8 +14,7 @@ TILESIZE = 64
 # Convert() to speed rendering time.
 background = pg.Surface(screen.get_size())
 background = background.convert()
-background.fill((35, 187, 51)) # Green
-
+background.fill((35, 187, 51))  # Green
 
 
 # End program
@@ -22,6 +23,8 @@ def terminate():
     sys.exit()
 
 # Load image and return image object
+
+
 def load_png(name):
     '''All icons are currently placeholders gained for free from craftpix.net'''
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -37,8 +40,28 @@ def load_png(name):
         raise SystemExit
     return image, image.get_rect()
 
-# Player Information
-PLAYERMOVERATE = 90 # Approx. 14 x 8 grid movement
 
-
-WORLD_MAP = []
+# TODO import Tiled editor for bigger/easier stages and non-manual input of nested lists
+# 'x' represents a collision wall, ' ' represents open space, and 'p' is the player.
+WORLD_MAP = [
+['x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x'],
+['x',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','x'],
+['x',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','x',' ',' ','x'],
+['x',' ',' ','x',' ',' ',' ',' ',' ','x','x','x','x','x',' ',' ',' ',' ',' ','x'],
+['x',' ',' ','x',' ',' ',' ',' ',' ',' ',' ',' ',' ','x',' ',' ',' ',' ',' ','x'],
+['x',' ',' ','x',' ',' ',' ',' ','p',' ',' ',' ',' ','x',' ',' ',' ',' ',' ','x'],
+['x',' ',' ','x',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','x'],
+['x',' ',' ','x',' ',' ',' ',' ',' ',' ',' ',' ',' ','x',' ',' ',' ',' ',' ','x'],
+['x',' ',' ','x',' ',' ',' ',' ',' ',' ',' ',' ',' ','x',' ',' ',' ',' ',' ','x'],
+['x',' ',' ','x',' ',' ',' ',' ',' ',' ',' ',' ',' ','x',' ',' ',' ',' ',' ','x'],
+['x',' ',' ','x',' ',' ',' ',' ',' ',' ',' ',' ',' ','x',' ',' ',' ',' ',' ','x'],
+['x',' ',' ','x',' ',' ',' ',' ',' ',' ',' ',' ',' ','x','x','x',' ',' ',' ','x'],
+['x',' ',' ',' ',' ',' ',' ','x',' ','x',' ',' ',' ',' ',' ',' ',' ',' ',' ','x'],
+['x',' ',' ',' ',' ',' ','x','x','x','x','x',' ',' ',' ',' ',' ',' ',' ',' ','x'],
+['x',' ',' ',' ',' ',' ',' ','x','x','x',' ',' ',' ',' ',' ',' ',' ',' ',' ','x'],
+['x',' ',' ',' ',' ',' ',' ',' ','x',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','x'],
+['x',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','x'],
+['x',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','x'],
+['x',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','x'],
+['x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x','x'],
+]
