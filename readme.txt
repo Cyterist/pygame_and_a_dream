@@ -1,4 +1,4 @@
-Sup guys
-Version control is up
-this is a test file for now
-if you need help with git or github ask me :) ~ Gabe
+This is the current prototyping I have done for the Overworld. 
+Currently, I am working on incorporating the Tiled map editor for easier use of maps. 
+I am also working on incorporating enemies and transitioning into battle. 
+~ Luke
