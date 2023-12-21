@@ -36,6 +36,7 @@ def create_text(text, text_color, font_size, x, y, screen, bgcolor=None):
 def create_default_screen(screen):
     pg.draw.rect(screen, BROWN, BATTLE_BAR)
     create_text(f'{player.name} HP: {player.hp}', WHITE, 30, 200, SCREEN_HEIGHT - BOTTOM_PANEL + 15, screen)
+    create_text(f'{player.name} SNOW: {player.snow}', WHITE, 30, 200, SCREEN_HEIGHT - BOTTOM_PANEL + 75, screen)
     for i, enemy in enumerate(enemies):
         create_text(f'{enemy.name} HP: {enemy.hp}', WHITE, 30, 1000, (SCREEN_HEIGHT - BOTTOM_PANEL + 15) + i * 60, screen)
 
@@ -44,14 +45,15 @@ def create_default_screen(screen):
 
 # Characters
 
-player = Character(200, 400, 'player', 30, 5)
-creeper = Character(850, 290, 'creeper', 30, 10)
-creeper2 = Character(1050, 290, 'creeper', 30, 10)
+player = Character(200, 400, 'player', 30, 30, 5)
+creeper = Character(850, 290, 'creeper', 30, 30, 10)
+creeper2 = Character(1050, 290, 'creeper', 30, 30, 10)
 
 
 player_hp = HealthBar(200, SCREEN_HEIGHT - BOTTOM_PANEL + 55, player.hp, player.max_hp)
 creeper_hp = HealthBar(1000, SCREEN_HEIGHT - BOTTOM_PANEL + 55, creeper.hp, creeper.max_hp)
 creeper2_hp = HealthBar(1000, SCREEN_HEIGHT - BOTTOM_PANEL + 115, creeper2.hp, creeper2.max_hp)
+player_snow = SnowMeter(200, SCREEN_HEIGHT - BOTTOM_PANEL + 115, player.snow, player.max_snow)
 
 characters.append(player)
 characters.append(creeper)
@@ -135,6 +137,7 @@ def main():
             enemy.draw(screen)
         
         player_hp.draw(player.hp, screen)
+        player_snow.draw(player.snow, screen)
         creeper_hp.draw(creeper.hp, screen)
         creeper2_hp.draw(creeper2.hp, screen)
         pg.display.flip()
