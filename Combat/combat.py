@@ -1,6 +1,6 @@
 from UI_Button import *
 from Character import *
-
+from bars import *
 
 active_char = 1
 characters = []
@@ -8,6 +8,11 @@ enemies = []
 cooldown = 0
 wait = 100
 attack = False
+target = None
+white_bar_speed = 0
+yellow = False
+red = False
+green = False
 
 # Define colors
 BLUE = (0,0,255)
@@ -40,14 +45,21 @@ def create_default_screen(screen):
     for i, enemy in enumerate(enemies):
         create_text(f'{enemy.name} HP: {enemy.hp}', WHITE, 30, 1000, (SCREEN_HEIGHT - BOTTOM_PANEL + 15) + i * 60, screen)
 
+def check_sides(rect):
+    if rect.left <= 350:
+        return True
+    elif rect.right >= 950:
+        return True
+    else:
+        return False
 
 
 
 # Characters
 
 player = Character(200, 400, 'player', 30, 30, 5)
-creeper = Character(850, 290, 'creeper', 30, 30, 10)
-creeper2 = Character(1050, 290, 'creeper', 30, 30, 10)
+creeper = Character(850, 390, 'creeper', 30, 30, 10)
+creeper2 = Character(1050, 390, 'creeper', 30, 30, 10)
 
 
 player_hp = HealthBar(200, SCREEN_HEIGHT - BOTTOM_PANEL + 55, player.hp, player.max_hp)
@@ -70,6 +82,7 @@ def main():
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     attack_btn = UIButton(center_position=(650,608), font_size=30, surface_color=BROWN, text_color=WHITE, text="Attack")
+
     
     while True:
         
@@ -79,6 +92,11 @@ def main():
         global characters
         global attack
         global enemies
+        global target
+        global white_bar_speed
+        global yellow
+        global red
+        global green
 
         total_chars = len(characters)
 
@@ -87,6 +105,9 @@ def main():
 
         mouse_up = False
         mouse_pos = pg.mouse.get_pos()
+
+        keys = pg.key.get_pressed()
+
         
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -107,9 +128,49 @@ def main():
                     create_text("Select Target", WHITE, 50, 550, 0, screen, BLUE)
                     for enemy in enemies:
                         if enemy.rect.collidepoint(mouse_pos) and mouse_up:
-                            player.attack(enemy)
-                            active_char += 1
-                            attack = False
+                            target = enemy
+                            print(target) 
+                if attack == True and target != None:
+                    for bar in attack_bars:
+                        bar.draw(screen)
+                    
+                    if white_bar_speed == 0:
+                        white_bar_speed = 3
+                    
+                    white_bar.x += white_bar_speed
+                    pg.draw.rect(screen, WHITE, white_bar)
+                    side = check_sides(white_bar)
+                    if side:
+                        white_bar_speed *= -1
+                    if keys[pg.K_SPACE]:
+                        if attack_y1.check_collision(white_bar) or attack_y2.check_collision(white_bar):
+                            yellow = True
+                        if attack_r1.check_collision(white_bar) or attack_r2.check_collision(white_bar):
+                            red = True
+                        if attack_g.check_collision(white_bar):
+                            green = True
+                    
+                    if red == True:
+                        player.attack(target, 0)
+                        red = False
+                        target = None
+                        white_bar.x = 350
+                        attack = False
+                        active_char += 1
+                    if yellow == True:
+                        player.attack(target, 3)
+                        yellow = False
+                        target = None
+                        white_bar.x = 350
+                        attack = False
+                        active_char += 1
+                    if green == True:
+                        player.attack(target, 10)
+                        green = False
+                        target = None
+                        white_bar.x = 350
+                        attack = False
+                        active_char += 1
         
         #Enemy Turn  
         for enemy in enemies:
@@ -118,7 +179,7 @@ def main():
                     create_text("Enemy Turn", WHITE, 50, 550, 0, screen)
                     cooldown +=1
                     if cooldown >= wait:
-                        enemy.attack(player)
+                        enemy.attack(player, 0)
                         active_char += 1
                         cooldown = 0
 
@@ -129,17 +190,20 @@ def main():
     
         
         # Drawing
-        create_default_screen(screen)
-        attack_btn.draw(screen)
+        
         player.draw(screen)
         
         for enemy in enemies:
             enemy.draw(screen)
         
+        create_default_screen(screen)
+        attack_btn.draw(screen)
+        
         player_hp.draw(player.hp, screen)
         player_snow.draw(player.snow, screen)
         creeper_hp.draw(creeper.hp, screen)
         creeper2_hp.draw(creeper2.hp, screen)
+        
         pg.display.flip()
         
 

@@ -23,8 +23,8 @@ class Character():
     def draw(self, screen):
         screen.blit(self.image, self.rect)
     
-    def attack(self, target):
-        target.hp -= self.dmg
+    def attack(self, target, modifier):
+        target.hp -= self.dmg + modifier
         if target.hp < 1:
             target.hp = 0
             target.alive = False

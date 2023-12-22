@@ -11,6 +11,12 @@ class TimeBar():
 
         self.bar = pg.Rect((self.x, self.y), (self.width, self.height))
 
+    def check_collision(self, rect):
+        if self.bar.colliderect(rect):
+            return True
+        else:
+            return False
+
     def draw(self, screen):
         pg.draw.rect(screen, self.color, self.bar)
 
