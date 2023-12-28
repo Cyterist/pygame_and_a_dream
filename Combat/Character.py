@@ -19,15 +19,42 @@ class Character():
         self.image = pg.image.load(f'pics/{self.name}/default.png')
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
+
+    def collect_snow(self):
+        self.snow = self.max_snow
     
     def draw(self, screen):
         screen.blit(self.image, self.rect)
     
+class Player(Character):
+    super.__init__
+
     def attack(self, target, modifier):
         target.hp -= self.dmg + modifier
+        if target.hp <= 0:
+            target.hp = 0
+            target.alive = False
+    
+
+    
+    def harder_hitting_ability(self, target, modifier):
+        target.hp -= round(self.dmg*1.5) + modifier
+        self.snow -= 10
         if target.hp < 1:
             target.hp = 0
             target.alive = False
+        
+
+class Enemy(Character):
+        
+    super.__init__
+        
+    def attack(self, target):
+        target.hp -= self.dmg
+        if target.hp < 1:
+            target.hp = 0
+            target.alive = False
+
 
 
 # Class for character health bars
@@ -55,5 +82,7 @@ class SnowMeter():
     def draw(self, snow, screen):
         self.snow = snow
         meter_fill = self.snow / self.max_snow
+        if self.snow <= 0:
+            self.snow = 0
         pg.draw.rect(screen, BLACK, (self.x, self.y, 150, 20))
         pg.draw.rect(screen, WHITE, (self.x, self.y, 150 * meter_fill, 20))

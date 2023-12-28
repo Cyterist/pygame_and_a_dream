@@ -6,22 +6,22 @@ from pygame.sprite import Sprite
 YELLOW = (255, 255, 0)
 
 # easy text creator
-def create_surface_text(text, font_size, text_color, surface_color):
+def create_surface_text(text, font_size, text_color):
     font = pgft.SysFont("Arial", font_size, bold=True)
-    surface, _ = font.render(text=text, fgcolor = text_color, bgcolor=surface_color)
+    surface, _ = font.render(text=text, fgcolor = text_color, bgcolor=None)
     return surface.convert_alpha()
 
 # Class to make UI buttons
 class UIButton(Sprite):
-    def __init__(self, center_position, text, font_size, surface_color, text_color):
+    def __init__(self, center_position, text, font_size, text_color):
         
         super().__init__()
         
         self.mouse_over = False
 
-        default = create_surface_text(text, font_size, text_color, surface_color)
+        default = create_surface_text(text, font_size, text_color)
 
-        highlighted = create_surface_text(text, font_size, YELLOW, surface_color)
+        highlighted = create_surface_text(text, font_size, YELLOW)
 
         self.images = [default, highlighted]
         self.rects = [default.get_rect(center=center_position), highlighted.get_rect(center=center_position)]
