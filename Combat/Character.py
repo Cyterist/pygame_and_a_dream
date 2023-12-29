@@ -87,7 +87,7 @@ class SnowMeter():
 # CHARACTERS
         
 player = Player(200, 400, 'player', 30, 30, 5)
-creeper = Enemy(850, 390, 'creeper', 30, 30, 1)
+creeper = Enemy(850, 390, 'creeper', 30, 30, 25)
 creeper2 = Enemy(1050, 390, 'creeper', 30, 30, 1)
 
 player_hp = HealthBar(200, SCREEN_HEIGHT - BOTTOM_PANEL + 55, player.hp, player.max_hp)

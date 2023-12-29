@@ -128,7 +128,7 @@ class Combat:
                             self.active_char += 1
 
                     if self.attack or self.ability_1:
-                        create_text("Select self.Target", WHITE, 50, 550, 0, screen)
+                        create_text("Select Target", WHITE, 50, 550, 0, screen)
                         for enemy in enemies:
                             if enemy.rect.collidepoint(self.mouse_pos) and self.mouse_up:
                                 self.target = enemy
