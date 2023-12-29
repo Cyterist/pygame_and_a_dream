@@ -4,7 +4,7 @@ from information import *
 class Snowball(pg.sprite.Sprite):
     def __init__(self, pos, groups, obstacle_sprites):
         super().__init__(groups)
-        self.image = pg.image.load('../Overworld/data/Snowball/snowball.png').convert_alpha()
+        self.image = pg.image.load('../Main/data/Snowball/snowball.png').convert_alpha()
         self.rect = self.image.get_rect(topleft=pos)
         self.obstacle_sprites = obstacle_sprites
 

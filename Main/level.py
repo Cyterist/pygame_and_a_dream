@@ -23,24 +23,24 @@ class Level():
         self.offset = pg.math.Vector2() 
 
         # creating the floor
-        self.floor_surf = pg.image.load('../Overworld/data/Level_0/test_map.png').convert()
+        self.floor_surf = pg.image.load('../Main/data/Level_0/test_map.png').convert()
         self.floor_rect = self.floor_surf.get_rect(topleft=(0, 0))
 
     # Map references in maps
     def create_map(self):
         # Key is style, value is layout
         layouts = {
-            'boundary': import_csv_layout('../Overworld/maps/Level_0/test_map_floorblocks.csv'),
-            'snowman': import_csv_layout('../Overworld/maps/Level_0/test_map_snowman.csv'),
-            'object': import_csv_layout('../Overworld/maps/Level_0/test_map_objects.csv'),
-            'enemy': import_csv_layout('../Overworld/maps/Level_0/test_map_enemy.csv'),
-            'npc': import_csv_layout('../Overworld/maps/Level_0/test_map_npc.csv')
+            'boundary': import_csv_layout('../Main/maps/Level_0/test_map_floorblocks.csv'),
+            'snowman': import_csv_layout('../Main/maps/Level_0/test_map_snowman.csv'),
+            'object': import_csv_layout('../Main/maps/Level_0/test_map_objects.csv'),
+            'enemy': import_csv_layout('../Main/maps/Level_0/test_map_enemy.csv'),
+            'npc': import_csv_layout('../Main/maps/Level_0/test_map_npc.csv')
         }
         graphics = {
-            'snowman': pg.image.load('../Overworld/data/Level_0/snowman.png').convert_alpha(),
-            'objects': import_cut_graphics('../Overworld/data/Level_0/fence_tiles64.png'),
-            'enemy': import_cut_graphics('../Overworld/data/Level_0/enemy.png'),
-            'npc': import_cut_graphics('../Overworld/data/Level_0/player.png')
+            'snowman': pg.image.load('../Main/data/Level_0/snowman.png').convert_alpha(),
+            'objects': import_cut_graphics('../Main/data/Level_0/fence_tiles64.png'),
+            'enemy': import_cut_graphics('../Main/data/Level_0/enemy.png'),
+            'npc': import_cut_graphics('../Main/data/Level_0/player.png')
         }
         for style, layout in layouts.items():
             for row_index, row in enumerate(layout):
@@ -134,7 +134,7 @@ class YSortedCameraGroup(pg.sprite.Group):
         self.offset = pg.math.Vector2()
 
         # Create the floor surface outside of the update method
-        self.floor_surf = pg.image.load('../Overworld/data/Level_0/test_map.png').convert()
+        self.floor_surf = pg.image.load('../Main/data/Level_0/test_map.png').convert()
         self.floor_rect = self.floor_surf.get_rect(topleft=(0, 0))
 
     def custom_draw(self, player):

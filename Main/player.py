@@ -2,7 +2,7 @@ import pygame as pg
 from information import *
 from support import import_folder
 from snowball import *
-from debug import debug, textbox_talk
+from debug import *
 
 class Player(pg.sprite.Sprite):
 
@@ -10,7 +10,7 @@ class Player(pg.sprite.Sprite):
         super().__init__(groups)
         self.snowman_group = snowman_group
 
-        self.image = pg.image.load('../Overworld/data/32-bit_placeholders/Player.png').convert_alpha()
+        self.image = pg.image.load('../Main/data/32-bit_placeholders/Player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
         
         # Adjust once placeholders are not in use
@@ -146,7 +146,7 @@ class Player(pg.sprite.Sprite):
                 if sprite.sprite_type == 'enemy' and self.rect.colliderect(sprite.rect):
                     pass
                 if sprite.sprite_type == 'npc' and self.rect.colliderect(sprite.rect) and self.talk:
-                    textbox_talk('This is a textbox')
+                    renderTextCenteredAt('Black Square Says:    This should theoretically split the text into lines that actually fit on the page. Combine it with a textbox art, and this could look good.', font, 'White', 500, 650, screen, 600, 250)
 
                     
                 if sprite.hitbox.colliderect(self.hitbox):

@@ -10,7 +10,6 @@ class Game:
     def __init__(self):
         pg.init()
         self.clock = pg.time.Clock()
-        # self.combat = Combat()
         self.level = Level()
         self.combat = Combat()
         self.actions = {'start' : False, 'end': False, 'combat': False}
@@ -27,7 +26,9 @@ class Game:
                         self.actions['combat'] = True
 
             screen.blit(background, (0, 0))
-            textbox_talk('Press the enter button to start', x = 340, y = 300)
+            textbox_talk('Snowball Chronicles', text_size = 120, bg_color= 'Blue', x = 190, y = 60)
+            textbox_talk('Press the enter button to start.', text_size = 100, x = 120, y = 300)
+            
             
             if self.actions['start']:
                 self.level.run()
