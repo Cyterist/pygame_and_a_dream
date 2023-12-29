@@ -2,30 +2,31 @@ from combat import *
 from Character import *
 from info import *
 
-clock = pg.time.Clock()
-
 # creeper = Enemy(850, 390, 'creeper', 30, 30, 1)
 
 fight1 = [creeper]
 fight1_health = [creeper_hp]
 
-def main():
+class Game:
+    def __init__(self):
+        pg.init()
+        self.clock = pg.time.Clock()
 
-    pg.init()
+        self.combat = Combat()
 
-    screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-    while True:
-        
-        clock.tick(FPS)
-        
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                pg.quit()
-            if event.type == pg.KEYDOWN:
-                if event.key == pg.K_SPACE:
-                    combat(screen, fight1, 2, fight1_health)
-                    print("pressed")
+    def run(self):
+        self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        while True:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    
+            self.combat.run(self.screen, fight1, 2, fight1_health)
+
+            pg.display.flip()
+            self.clock.tick(FPS)
 
 if __name__ == '__main__':
-    main()
+    game = Game()
+    game.run()
