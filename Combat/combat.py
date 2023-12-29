@@ -1,10 +1,9 @@
 from UI_Button import *
 from Character import *
 from bars import *
+from info import *
 
 active_char = 1
-characters = []
-enemies = []
 cooldown = 0
 wait = 100
 attack = False
@@ -15,20 +14,7 @@ yellow = False
 red = False
 green = False
 
-# Define colors
-BLUE = (0,0,255)
-BROWN = (105, 77, 49)
-WHITE = (255, 255, 255)
 
-
-# Define screen information
-BOTTOM_PANEL = 200
-SCREEN_WIDTH = 1280
-SCREEN_HEIGHT = 720
-BATTLE_BAR = pg.Rect((0,SCREEN_HEIGHT - BOTTOM_PANEL), (SCREEN_WIDTH,BOTTOM_PANEL))
-FPS = 60
-
-clock = pg.time.Clock()
 
 background = pg.image.load('pics/assets/background.png')
 scaled_bg = pg.transform.scale(background, (background.get_width() * 4, background.get_height() * 4))
@@ -44,7 +30,7 @@ def create_text(text, text_color, font_size, x, y, screen, bgcolor=None):
 
 
 # Creating screen
-def create_default_screen(screen):
+def create_default_screen(screen, enemies):
     
     screen.blit(scaled_bg,(0,0))
     screen.blit(scaled_panel, (-90, SCREEN_HEIGHT-BOTTOM_PANEL-85))
@@ -66,31 +52,12 @@ def check_sides(rect):
 
 
 
-# Characters
-
-player = Player(200, 400, 'player', 30, 30, 5)
-creeper = Enemy(850, 390, 'creeper', 30, 30, 1)
-creeper2 = Enemy(1050, 390, 'creeper', 30, 30, 1)
-
-
-player_hp = HealthBar(200, SCREEN_HEIGHT - BOTTOM_PANEL + 55, player.hp, player.max_hp)
-creeper_hp = HealthBar(1000, SCREEN_HEIGHT - BOTTOM_PANEL + 55, creeper.hp, creeper.max_hp)
-creeper2_hp = HealthBar(1000, SCREEN_HEIGHT - BOTTOM_PANEL + 115, creeper2.hp, creeper2.max_hp)
-player_snow = SnowMeter(200, SCREEN_HEIGHT - BOTTOM_PANEL + 115, player.snow, player.max_snow)
-
-characters.append(player)
-characters.append(creeper)
-characters.append(creeper2)
-enemies.append(creeper)
-enemies.append(creeper2)
-
-
 # Main game function
-def main():
-    pg.init()
+def combat(screen, enemies, total_chars, health_bars):
+    # pg.init()
 
     
-    screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    # screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     attack_btn = UIButton(center_position=(650,608), font_size=30, text_color=WHITE, text="Attack")
     ability1_btn = UIButton(center_position=(650,658), font_size=30, text_color=WHITE, text="Ability 1")
@@ -103,21 +70,15 @@ def main():
         global active_char
         global cooldown
         global wait
-        global characters
         global attack
-        global enemies
         global target
         global white_bar_speed
         global yellow
         global red
         global green
         global ability_1
-
-        total_chars = len(characters)
-
-        clock.tick(FPS)
         
-        create_default_screen(screen)
+        create_default_screen(screen, enemies)
 
         mouse_up = False
         mouse_pos = pg.mouse.get_pos()
@@ -278,6 +239,8 @@ def main():
         
         for enemy in enemies:
             enemy.draw(screen)
+            for bar in health_bars:
+                bar.draw(enemy.hp, screen)
         
         collect_btn.draw(screen)
         attack_btn.draw(screen)
@@ -285,8 +248,7 @@ def main():
         
         player_hp.draw(player.hp, screen)
         player_snow.draw(player.snow, screen)
-        creeper_hp.draw(creeper.hp, screen)
-        creeper2_hp.draw(creeper2.hp, screen)
+
 
         if not player.alive:
             screen.fill(BLACK)
@@ -295,8 +257,8 @@ def main():
         pg.display.flip()
         
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     combat()
 
 
 

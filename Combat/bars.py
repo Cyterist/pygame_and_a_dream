@@ -1,13 +1,10 @@
 from timing import *
+from info import *
 
-RED = (255,0,0)
-YELLOW = (255,255,0)
-GREEN = (0,255,0)
-WHITE = (255,255,255)
 TOTAL_BAR = 600
 
 # white bar
-white_bar = pg.Rect((350,75), (5, 30))
+white_bar = pg.Rect((350,75), (6, 30))
 
 # Attack SR-MSY-MG-MSY-SR
 

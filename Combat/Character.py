@@ -1,9 +1,5 @@
 import pygame as pg
-
-RED = (255, 0 , 0)
-GREEN = (0, 255, 0)
-BLACK = (0,0,0)
-WHITE = (255, 255, 255)
+from info import *
 # Class for creating characters
 
 class Character():
@@ -86,3 +82,15 @@ class SnowMeter():
             self.snow = 0
         pg.draw.rect(screen, BLACK, (self.x, self.y, 150, 20))
         pg.draw.rect(screen, WHITE, (self.x, self.y, 150 * meter_fill, 20))
+
+
+# CHARACTERS
+        
+player = Player(200, 400, 'player', 30, 30, 5)
+creeper = Enemy(850, 390, 'creeper', 30, 30, 1)
+creeper2 = Enemy(1050, 390, 'creeper', 30, 30, 1)
+
+player_hp = HealthBar(200, SCREEN_HEIGHT - BOTTOM_PANEL + 55, player.hp, player.max_hp)
+creeper_hp = HealthBar(1000, SCREEN_HEIGHT - BOTTOM_PANEL + 55, creeper.hp, creeper.max_hp)
+creeper2_hp = HealthBar(1000, SCREEN_HEIGHT - BOTTOM_PANEL + 115, creeper2.hp, creeper2.max_hp)
+player_snow = SnowMeter(200, SCREEN_HEIGHT - BOTTOM_PANEL + 115, player.snow, player.max_snow)
