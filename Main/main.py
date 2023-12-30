@@ -4,6 +4,7 @@ from information import *
 from debug import *
 from level import Level
 from combat import *
+from fights import *
 
 
 class Game:
@@ -32,10 +33,10 @@ class Game:
             
             if self.actions['start']:
                 self.level.run()
-            if self.actions['combat']:
-                self.combat.run(screen, [creeper, creeper2], 3, [creeper_hp, creeper2_hp])
+            if self.level.creeper1:
+                self.combat.run(fights['creeper1']['screen'], fights['creeper1']['enemies'], fights['creeper1']['total_chars'], fights['creeper1']['health_bars'])
                 if self.combat.combat == False:
-                    self.actions['combat'] = False
+                    self.level.creeper1 = False
                 if self.combat.loss == True and self.combat.combat == False:
                     self.actions['start'] == False
 

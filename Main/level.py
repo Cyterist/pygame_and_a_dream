@@ -18,6 +18,7 @@ class Level():
         # sprite setup
         self.snowman_group = pg.sprite.Group()
         self.create_map()
+        self.creeper1 = False
 
         # Offset for camera
         self.offset = pg.math.Vector2() 
@@ -34,13 +35,15 @@ class Level():
             'snowman': import_csv_layout('../Main/maps/Level_0/test_map_snowman.csv'),
             'object': import_csv_layout('../Main/maps/Level_0/test_map_objects.csv'),
             'enemy': import_csv_layout('../Main/maps/Level_0/test_map_enemy.csv'),
-            'npc': import_csv_layout('../Main/maps/Level_0/test_map_npc.csv')
+            'npc': import_csv_layout('../Main/maps/Level_0/test_map_npc.csv'),
+            'npc2': import_csv_layout('../Main/maps/Level_0/test_map_npc2.csv')
         }
         graphics = {
             'snowman': pg.image.load('../Main/data/Level_0/snowman.png').convert_alpha(),
             'objects': import_cut_graphics('../Main/data/Level_0/fence_tiles64.png'),
             'enemy': import_cut_graphics('../Main/data/Level_0/enemy.png'),
-            'npc': import_cut_graphics('../Main/data/Level_0/player.png')
+            'npc': import_cut_graphics('../Main/data/Level_0/player.png'),
+            'npc2': pg.image.load('../Main/data/Level_0/alienship64.png').convert()
         }
         for style, layout in layouts.items():
             for row_index, row in enumerate(layout):
@@ -65,6 +68,11 @@ class Level():
                         if style == 'npc':
                             npc_tile = graphics['npc'][int(col)]
                             Tile((x, y), [self.visible_sprites, self.snowman_group, self.obstacle_sprites], 'npc', npc_tile)
+                        if style == 'npc2':
+                            npc2_tile = graphics['npc2']
+                            Tile((x, y), [self.visible_sprites, self.snowman_group, self.obstacle_sprites], 'npc2', npc2_tile)
+
+                                
                             
         
 
@@ -101,6 +109,9 @@ class Level():
         # Update snowball position if thrown
         if self.player.snowball.thrown:
             self.player.snowball.update_position(self.obstacle_sprites)
+        
+        if self.player.creeper1:
+            self.creeper1 = True
 
         # Draw sprites above player's level
         for sprite in sprites:

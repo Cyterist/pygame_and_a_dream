@@ -27,6 +27,8 @@ class Player(pg.sprite.Sprite):
         self.direction = pg.math.Vector2()
 
         self.speed = 5
+        self.cooldown = 0
+        self.wait = 150
         self.throwing = False
         self.snowball_cooldown = 721
         self.snowball_time = None
@@ -34,6 +36,7 @@ class Player(pg.sprite.Sprite):
         self.vel = pg.math.Vector2(0, 0)
         self.throwing = False
         self.talk = False
+        self.creeper1 = False
 
 
     # main character sprites and animation
@@ -69,11 +72,13 @@ class Player(pg.sprite.Sprite):
         elif keys[pg.K_a]:
             self.direction.x = -1
             self.status = 'left'
-        
+            
         if keys[pg.K_SPACE]:
-            self.talk = True
-        elif keys[pg.K_ESCAPE]:
-            self.talk = False
+            if self.talk == False:
+                self.talk = True
+        if keys[pg.K_ESCAPE]:
+                self.talk = False
+
 
         # Normalize the direction vector only if it is not the zero vector
         if self.direction.magnitude() != 0:
@@ -147,6 +152,12 @@ class Player(pg.sprite.Sprite):
                     pass
                 if sprite.sprite_type == 'npc' and self.rect.colliderect(sprite.rect) and self.talk:
                     renderTextCenteredAt('Black Square Says:    This should theoretically split the text into lines that actually fit on the page. Combine it with a textbox art, and this could look good.', font, 'White', 500, 650, screen, 600, 250)
+                    self.creeper1 = True
+                if sprite.sprite_type == 'npc2' and self.rect.colliderect(sprite.rect) and self.talk:
+                    renderTextCenteredAt('Alien Ship Says:      no way this actually works first try right guys? no way', font, 'White', 500, 650, screen, 600, 250)
+                    
+
+
 
                     
                 if sprite.hitbox.colliderect(self.hitbox):

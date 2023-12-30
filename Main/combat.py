@@ -1,7 +1,7 @@
 from UI_Button import *
 from Character import *
 from bars import *
-from info import *
+from information import *
 from debug import debug
 
 
@@ -16,16 +16,16 @@ scaled_panel = pg.transform.scale(
 def create_default_screen(screen, enemies):
 
     screen.blit(scaled_bg, (0, 0))
-    screen.blit(scaled_panel, (-90, SCREEN_HEIGHT-BOTTOM_PANEL-85))
+    screen.blit(scaled_panel, (-90, WINDOWHEIGHT-BOTTOM_PANEL-85))
 
     create_text(f'{player.name} HP: {player.hp}', WHITE, 30,
-                200, SCREEN_HEIGHT - BOTTOM_PANEL + 15, screen)
+                200, WINDOWHEIGHT - BOTTOM_PANEL + 15, screen)
     create_text(f'{player.name} SNOW: {player.snow}', WHITE, 30,
-                200, SCREEN_HEIGHT - BOTTOM_PANEL + 75, screen)
+                200, WINDOWHEIGHT - BOTTOM_PANEL + 75, screen)
 
     for i, enemy in enumerate(enemies):
         create_text(f'{enemy.name} HP: {enemy.hp}', WHITE, 30, 1000,
-                    (SCREEN_HEIGHT - BOTTOM_PANEL + 15) + i * 60, screen)
+                    (WINDOWHEIGHT - BOTTOM_PANEL + 15) + i * 60, screen)
 
 
 def create_text(text, text_color, font_size, x, y, screen, bgcolor=None):
@@ -70,7 +70,7 @@ class Combat():
     def run(self, screen, enemies, total_chars, health_bars):
         # pg.init()
 
-        # screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        # screen = pg.display.set_mode((SCREEN_WIDTH, WINDOWHEIGHT))
 
         self.attack_btn = UIButton(center_position=(
             650, 608), font_size=30, text_color=WHITE, text="Attack")
@@ -124,7 +124,7 @@ class Combat():
                     if self.attack or self.ability_1:
                         create_text("Select Target", WHITE, 50, 550, 0, screen)
                         for enemy in enemies:
-                            if enemy.rect.collidepoint(self.mouse_pos) and self.mouse_up:
+                            if enemy.rect.collidepoint(self.mouse_pos) and self.mouse_up and enemy.alive:
                                 self.target = enemy
                                 print(self.target)
 
@@ -228,7 +228,7 @@ class Combat():
                         self.active_char += 1
                         self.cooldown = 0
 
-            if len(dead_list) == 2:
+            if len(dead_list) == len(enemies):
                 self.win = True
                     
 

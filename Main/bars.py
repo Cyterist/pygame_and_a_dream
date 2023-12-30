@@ -1,5 +1,5 @@
 from timing import *
-from info import *
+from information import *
 
 TOTAL_BAR = 600
 

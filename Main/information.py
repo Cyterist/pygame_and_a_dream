@@ -9,6 +9,16 @@ WINDOWHEIGHT = 720
 screen = pg.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
 FPS = 60
 tile_size = 64
+BOTTOM_PANEL = 200
+
+
+BLUE = (0, 0, 255)
+BROWN = (105, 77, 49)
+WHITE = (255, 255, 255)
+RED = (255, 0 ,0)
+GREEN = (0, 255, 0)
+BLACK = (0, 0, 0)
+YELLOW = (255, 255, 0)
 
 
 # Convert() to speed rendering time.

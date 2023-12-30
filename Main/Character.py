@@ -1,5 +1,5 @@
 import pygame as pg
-from info import *
+from information import *
 # Class for creating characters
 
 class Character():
@@ -90,7 +90,7 @@ player = Player(200, 400, 'player', 30, 30, 500)
 creeper = Enemy(850, 390, 'creeper', 30, 30, 25)
 creeper2 = Enemy(1050, 390, 'creeper', 30, 30, 1)
 
-player_hp = HealthBar(200, SCREEN_HEIGHT - BOTTOM_PANEL + 55, player.hp, player.max_hp)
-creeper_hp = HealthBar(1000, SCREEN_HEIGHT - BOTTOM_PANEL + 55, creeper.hp, creeper.max_hp)
-creeper2_hp = HealthBar(1000, SCREEN_HEIGHT - BOTTOM_PANEL + 115, creeper2.hp, creeper2.max_hp)
-player_snow = SnowMeter(200, SCREEN_HEIGHT - BOTTOM_PANEL + 115, player.snow, player.max_snow)
+player_hp = HealthBar(200, WINDOWHEIGHT - BOTTOM_PANEL + 55, player.hp, player.max_hp)
+creeper_hp = HealthBar(1000, WINDOWHEIGHT - BOTTOM_PANEL + 55, creeper.hp, creeper.max_hp)
+creeper2_hp = HealthBar(1000, WINDOWHEIGHT - BOTTOM_PANEL + 115, creeper2.hp, creeper2.max_hp)
+player_snow = SnowMeter(200, WINDOWHEIGHT - BOTTOM_PANEL + 115, player.snow, player.max_snow)
