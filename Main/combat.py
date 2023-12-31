@@ -3,6 +3,7 @@ from Character import *
 from bars import *
 from information import *
 from debug import debug
+from fights import *
 
 
 combat_background = pg.image.load('pics/assets/background.png').convert_alpha()
@@ -74,8 +75,9 @@ class Combat():
         self.collect_btn = UIButton(center_position=(
             650, 558), font_size=30, text_color=WHITE, text="Collect Snow")
 
-        running = True
-        while running and not self.end_combat:
+        self.running = True
+        while self.running and not self.end_combat:
+            print('combat is working')
             create_default_screen(screen, enemies)
 
             self.mouse_up = False
@@ -253,20 +255,27 @@ class Combat():
                 create_text("GAME OVER", RED, 100, 400, 300, screen)
                 self.cooldown += 1
                 if self.cooldown >= self.win_wait:
-                    running = False
+                    self.running = False
                     self.loss = True
                     self.combat = False
                     self.end_combat = True
+                
+
 
             if self.win:
                 screen.fill(YELLOW)
                 create_text("YOU HAVE WON", BLACK, 100, 400, 300, screen)
                 self.cooldown += 1
                 if self.cooldown >= self.win_wait:
+                    if fights['creeper1']['fight_begun']:
+                        fights['creeper1']['fight_won'] = True
+                    if fights['creeper2']['fight_begun']:
+                        fights['creeper2']['fight_won'] = True
                     self.end_combat = True
                     self.combat = False
-                    running = False
+                    self.running = False
                     self.win = False
+                    
                    
 
             pg.display.flip()

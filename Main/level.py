@@ -62,10 +62,10 @@ class Level():
                             # Add snowman sprites to both snowman_group and obstacle_sprites
                             snowman_tile = graphics['snowman']
                             Tile((x, y), [self.visible_sprites, self.snowman_group, self.obstacle_sprites], 'snowman', snowman_tile)
-                        if style == 'enemy':
-                            enemy_tile = graphics['enemy'][int(col)]
-                            enemy = Enemy((x, y), [self.visible_sprites, self.obstacle_sprites], enemy_tile)
-                            self.enemy_group.append(enemy)
+                        # if style == 'enemy':
+                        #     enemy_tile = graphics['enemy'][int(col)]
+                        #     enemy = Enemy((x, y), [self.visible_sprites, self.obstacle_sprites], enemy_tile)
+                        #     self.enemy_group.append(enemy)
                         if style == 'npc':
                             npc_tile = graphics['npc'][int(col)]
                             Tile((x, y), [self.visible_sprites, self.snowman_group, self.obstacle_sprites], 'npc', npc_tile)
@@ -111,12 +111,9 @@ class Level():
         if self.player.snowball.thrown:
             self.player.snowball.update_position(self.obstacle_sprites)
         
-        if self.player.creeper1:
-            self.creeper1 = True
-        if self.player.combat.end_combat:
-            self.creeper1 = False
-        elif self.player.creeper2:
-            self.creeper2 = True
+        self.creeper1 = self.player.creeper1
+
+        self.creeper2 = self.player.creeper2
 
         # Draw sprites above player's level
         for sprite in sprites:

@@ -33,12 +33,16 @@ class Game:
             
             if self.actions['start']:
                 self.level.run()
+            
             if self.level.creeper1:
-                self.combat.run(fights['creeper1']['screen'], fights['creeper1']['enemies'], fights['creeper1']['total_chars'], fights['creeper1']['health_bars'])   
-            if self.level.creeper2:
+                self.combat.run(fights['creeper1']['screen'], fights['creeper1']['enemies'], fights['creeper1']['total_chars'], fights['creeper1']['health_bars'])
+            if fights['creeper2']['fight_begun']:
                 self.combat.run(fights['creeper2']['screen'], fights['creeper2']['enemies'], fights['creeper2']['total_chars'], fights['creeper2']['health_bars'])
-            if self.combat.combat == False:
-                self.level.creeper1 = False   
+                print(self.combat.running, self.combat.end_combat)
+                if self.combat.running == False:
+                    self.combat.running = True
+                    self.combat.run(fights['creeper2']['screen'], fights['creeper2']['enemies'], fights['creeper2']['total_chars'], fights['creeper2']['health_bars'])
+
             pg.display.flip()
             self.clock.tick(FPS)
 

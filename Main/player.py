@@ -31,7 +31,6 @@ class Player(pg.sprite.Sprite):
         self.end_cooldown = 0
         self.combat = Combat()
         self.combat_cooldown = 0
-        self.combat_ended = False
         self.wait = 10
         self.end_wait = 100
         self.combat_wait = 250
@@ -98,6 +97,8 @@ class Player(pg.sprite.Sprite):
                 if not self.talking:
                     if not self.talk:
                         self.talk = True
+                        if fights['creeper2']['fight_won'] or fights['creeper1']['fight_won']:
+                            self.combat_cooldown = 0
                 self.cooldown = 0
             
             if self.talking and not self.end_talk:
@@ -176,7 +177,7 @@ class Player(pg.sprite.Sprite):
                 if sprite.sprite_type == 'enemy' and self.rect.colliderect(sprite.rect):
                     pass
                 if sprite.sprite_type == 'npc' and self.rect.colliderect(sprite.rect) and self.talk:
-                    print('in contact', self.talking, self.talk, self.combat_ended, self.combat_cooldown, self.combat_wait)
+                    print('in contact', self.talking, self.talk, self.combat_cooldown, self.combat_wait)
                     if not fights['creeper1']['fight_won']:
                         self.talking = True
                         self.combat_cooldown += 1
@@ -187,8 +188,9 @@ class Player(pg.sprite.Sprite):
                                 self.combat_cooldown = 251
                                 self.talk = False
                                 self.talking = False
-                                fights['creeper1']['fight_won'] = True
+                                fights['creeper1']['fight_begun'] = True
                     elif fights['creeper1']['fight_won']:
+                            self.creeper1 = False
                             self.combat_cooldown = 0
                             self.talking = True
                             if self.talk:
@@ -198,19 +200,31 @@ class Player(pg.sprite.Sprite):
                                     self.end_talk = True
 
                 if sprite.sprite_type == 'npc2' and self.rect.colliderect(sprite.rect) and self.talk:
-                    print('in contact', self.talking, self.talk, self.combat_ended, self.combat_cooldown, self.combat_wait)
-                    if not fights['creeper1']['fight_won']:
+                    if not fights['creeper2']['fight_won'] and not fights['creeper1']['fight_won']:
+                        self.talking = True
+                        self.combat_cooldown += 1
+                        if self.combat_cooldown <= 251:
+                            print('no other enemy fought yet')
+                            renderTextCenteredAt('Alien Space Ship Says:      This formatting needs redone', font, 'White', 500, 650, screen, 600, 250)
+                            if self.combat_cooldown >= self.combat_wait:
+                                self.creeper2 = True
+                                self.combat_cooldown = 251
+                                self.talk = False
+                                self.talking = False
+                                fights['creeper2']['fight_begun'] = True
+                    elif fights['creeper1']['fight_won']:
                         self.talking = True
                         self.combat_cooldown += 1
                         if self.combat_cooldown <= 251:
                             renderTextCenteredAt('Alien Space Ship Says:      This formatting needs redone', font, 'White', 500, 650, screen, 600, 250)
                             if self.combat_cooldown >= self.combat_wait:
-                                self.creeper1 = True
+                                self.creeper2 = True
                                 self.combat_cooldown = 251
                                 self.talk = False
                                 self.talking = False
-                                fights['creeper1']['fight_won'] = True
-                    elif fights['creeper1']['fight_won']:
+                                fights['creeper2']['fight_begun'] = True
+                                print(fights['creeper2']['fight_begun'])
+                    elif fights['creeper2']['fight_won']:
                             self.combat_cooldown = 0
                             self.talking = True
                             if self.talk:
