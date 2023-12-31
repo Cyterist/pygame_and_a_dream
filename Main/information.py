@@ -4,11 +4,15 @@ import os
 
 # Window Information
 pg.display.set_caption('Snowball Chronicles')
+
+game_width = 640
+game_height = 360
+
 WINDOWWIDTH = 1280
 WINDOWHEIGHT = 720
 screen = pg.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
 FPS = 60
-tile_size = 64
+tile_size = 32
 BOTTOM_PANEL = 200
 
 
@@ -24,7 +28,7 @@ YELLOW = (255, 255, 0)
 # Convert() to speed rendering time.
 background = pg.Surface(screen.get_size())
 background = background.convert()
-background.fill((156, 219, 67))  # Green
+background.fill((135, 133, 121))  # Green
 
 
 # End program

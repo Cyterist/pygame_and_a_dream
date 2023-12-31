@@ -10,11 +10,12 @@ class Player(pg.sprite.Sprite):
         super().__init__(groups)
         self.snowman_group = snowman_group
 
-        self.image = pg.image.load('../Main/data/32-bit_placeholders/Player.png').convert_alpha()
-        self.rect = self.image.get_rect(topleft = pos)
+        self.image = pg.image.load('../Main/data/32-bit_placeholders/Player32.png').convert_alpha()
+        self.image_scaled = pg.transform.scale_by(self.image, 2)
+        self.rect = self.image_scaled.get_rect(topleft = pos)
         
         # Adjust once placeholders are not in use
-        self.hitbox = self.rect.inflate(-37, 0)
+        self.hitbox = self.rect.inflate(-10, 0)
         
         # Graphics
         self.import_player_assets()
@@ -53,6 +54,7 @@ class Player(pg.sprite.Sprite):
 
 
     def input(self):
+        self.talk = False
         keys = pg.key.get_pressed()
 
         # Reset the direction vector

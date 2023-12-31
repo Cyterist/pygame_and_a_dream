@@ -13,7 +13,10 @@ class Game:
         self.clock = pg.time.Clock()
         self.level = Level()
         self.combat = Combat()
-        self.actions = {'start' : False, 'end': False, 'combat': False}
+        self.actions = {'start': False, 'end': False, 'combat': False}
+        self.game_width = 640  # Set your desired game width
+        self.game_height = 360  # Set your desired game height
+        self.display_surface = pg.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
 
     def run(self):
         while True:
@@ -26,7 +29,7 @@ class Game:
                     if event.key == pg.K_h and self.actions['start']:
                         self.actions['combat'] = True
 
-            screen.blit(background, (0, 0))
+            
             textbox_talk('Snowball Chronicles', text_size = 120, bg_color= 'Blue', x = 190, y = 60)
             textbox_talk('Press the enter button to start.', text_size = 100, x = 120, y = 300)
             
@@ -39,7 +42,8 @@ class Game:
                     self.level.creeper1 = False
                 if self.combat.loss == True and self.combat.combat == False:
                     self.actions['start'] == False
-
+            screen.blit(background, (0, 0))
+            self.level.run(screen)
             pg.display.flip()
             self.clock.tick(FPS)
 
