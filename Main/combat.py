@@ -60,17 +60,12 @@ class Combat():
         self.combat = True
         self.win = False
         self.loss = False
+        self.end_combat = False
 
-    # text function v2, cause I can't figure out why the one from UI_button won't work in certain cases
 
-    # Creating screen
-
-    # Main game function
+    # Main combat function
 
     def run(self, screen, enemies, total_chars, health_bars):
-        # pg.init()
-
-        # screen = pg.display.set_mode((SCREEN_WIDTH, WINDOWHEIGHT))
 
         self.attack_btn = UIButton(center_position=(
             650, 608), font_size=30, text_color=WHITE, text="Attack")
@@ -80,7 +75,7 @@ class Combat():
             650, 558), font_size=30, text_color=WHITE, text="Collect Snow")
 
         running = True
-        while running:
+        while running and not self.end_combat:
             create_default_screen(screen, enemies)
 
             self.mouse_up = False
@@ -261,15 +256,18 @@ class Combat():
                     running = False
                     self.loss = True
                     self.combat = False
+                    self.end_combat = True
 
             if self.win:
                 screen.fill(YELLOW)
                 create_text("YOU HAVE WON", BLACK, 100, 400, 300, screen)
                 self.cooldown += 1
                 if self.cooldown >= self.win_wait:
+                    self.end_combat = True
+                    self.combat = False
                     running = False
                     self.win = False
-                    self.combat = False
+                   
 
             pg.display.flip()
 

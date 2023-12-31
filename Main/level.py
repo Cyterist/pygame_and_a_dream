@@ -19,6 +19,7 @@ class Level():
         self.snowman_group = pg.sprite.Group()
         self.create_map()
         self.creeper1 = False
+        self.creeper2 = False
 
         # Offset for camera
         self.offset = pg.math.Vector2() 
@@ -112,6 +113,10 @@ class Level():
         
         if self.player.creeper1:
             self.creeper1 = True
+        if self.player.combat.end_combat:
+            self.creeper1 = False
+        elif self.player.creeper2:
+            self.creeper2 = True
 
         # Draw sprites above player's level
         for sprite in sprites:

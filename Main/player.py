@@ -3,6 +3,8 @@ from information import *
 from support import import_folder
 from snowball import *
 from debug import *
+from combat import *
+from fights import *
 
 class Player(pg.sprite.Sprite):
 
@@ -10,9 +12,8 @@ class Player(pg.sprite.Sprite):
         super().__init__(groups)
         self.snowman_group = snowman_group
 
-        self.image = pg.image.load('../Main/data/32-bit_placeholders/Player32.png').convert_alpha()
-        self.scaled_image = pg.transform.scale_by(self.image, 2)
-        self.rect = self.scaled_image.get_rect(topleft = pos)
+        self.image = pg.image.load('../Main/data/32-bit_placeholders/Player.png').convert_alpha()
+        self.rect = self.image.get_rect(topleft = pos)
         
         # Adjust once placeholders are not in use
         self.hitbox = self.rect.inflate(-37, 0)
@@ -28,9 +29,12 @@ class Player(pg.sprite.Sprite):
         self.direction = pg.math.Vector2()
         self.cooldown = 0
         self.end_cooldown = 0
+        self.combat = Combat()
+        self.combat_cooldown = 0
+        self.combat_ended = False
         self.wait = 10
         self.end_wait = 100
-        self.combat_wait = 3000
+        self.combat_wait = 250
         self.speed = 5
         self.cooldown = 0
         self.wait = 100
@@ -44,6 +48,7 @@ class Player(pg.sprite.Sprite):
         self.talking = False
         self.end_talk = False
         self.creeper1 = False
+        self.creeper2 = False
 
 
     # main character sprites and animation
@@ -171,22 +176,53 @@ class Player(pg.sprite.Sprite):
                 if sprite.sprite_type == 'enemy' and self.rect.colliderect(sprite.rect):
                     pass
                 if sprite.sprite_type == 'npc' and self.rect.colliderect(sprite.rect) and self.talk:
-                    self.cooldown += 1
-                    renderTextCenteredAt('Black Square Says:    This should theoretically split the text into lines that actually fit on the page. Combine it with a textbox art, and this could look good.', font, 'White', 500, 650, screen, 600, 250)
-                    if self.cooldown > self.combat_wait:
-                        self.creeper1 = True
+                    print('in contact', self.talking, self.talk, self.combat_ended, self.combat_cooldown, self.combat_wait)
+                    if not fights['creeper1']['fight_won']:
+                        self.talking = True
+                        self.combat_cooldown += 1
+                        if self.combat_cooldown <= 251:
+                            renderTextCenteredAt('Black Square Says:    This should theoretically split the text into lines that actually fit on the page. Combine it with a textbox art, and this could look good.', font, 'White', 500, 650, screen, 600, 250)
+                            if self.combat_cooldown >= self.combat_wait:
+                                self.creeper1 = True
+                                self.combat_cooldown = 251
+                                self.talk = False
+                                self.talking = False
+                                fights['creeper1']['fight_won'] = True
+                    elif fights['creeper1']['fight_won']:
+                            self.combat_cooldown = 0
+                            self.talking = True
+                            if self.talk:
+                                renderTextCenteredAt('You won the fight!',font, 'White', 500, 650, screen, 600, 250)
+                                self.end_cooldown += 1
+                                if self.end_cooldown > self.end_wait:
+                                    self.end_talk = True
+
                 if sprite.sprite_type == 'npc2' and self.rect.colliderect(sprite.rect) and self.talk:
-                    renderTextCenteredAt('Alien Ship Says:      no way this actually works first try right guys? no way', font, 'White', 500, 650, screen, 600, 250)
-                    self.talking = True
-                    self.end_cooldown += 1
-                    print(self.end_cooldown, self.end_wait)
-                    if self.end_cooldown > self.end_wait:
-                        self.end_talk = True
-                    
+                    print('in contact', self.talking, self.talk, self.combat_ended, self.combat_cooldown, self.combat_wait)
+                    if not fights['creeper1']['fight_won']:
+                        self.talking = True
+                        self.combat_cooldown += 1
+                        if self.combat_cooldown <= 251:
+                            renderTextCenteredAt('Alien Space Ship Says:      This formatting needs redone', font, 'White', 500, 650, screen, 600, 250)
+                            if self.combat_cooldown >= self.combat_wait:
+                                self.creeper1 = True
+                                self.combat_cooldown = 251
+                                self.talk = False
+                                self.talking = False
+                                fights['creeper1']['fight_won'] = True
+                    elif fights['creeper1']['fight_won']:
+                            self.combat_cooldown = 0
+                            self.talking = True
+                            if self.talk:
+                                renderTextCenteredAt('You won the fight!',font, 'White', 500, 650, screen, 600, 250)
+                                self.end_cooldown += 1
+                                if self.end_cooldown > self.end_wait:
+                                    self.end_talk = True
 
+                            
+            
 
-
-                    
+                # Direction detection for collision
                 if sprite.hitbox.colliderect(self.hitbox):
                     if self.direction.x > 0: # Moving to the right
                         self.hitbox.right = sprite.hitbox.left
@@ -196,7 +232,7 @@ class Player(pg.sprite.Sprite):
         if direction == 'vertical':
             for sprite in self.obstacle_sprites:
                 if sprite.sprite_type == 'enemy' and self.rect.colliderect(sprite.rect):
-                    print('touched an enemy, begin combat')
+                    pass
                 if sprite.hitbox.colliderect(self.hitbox):
                     if self.direction.y > 0: # Moving down
                         self.hitbox.bottom = sprite.hitbox.top
