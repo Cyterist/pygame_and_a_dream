@@ -8,18 +8,15 @@ class Tile(pg.sprite.Sprite):
 		super().__init__(groups)
 		self.sprite_type = sprite_type
 		self.image = surface
-		# If larger pictures than 32 x 32 are used, this will be used to offset loading.
+		# If larger pictures than 64 x 64 are used, this will be used to offset loading.
 		if sprite_type == 'object':
-			# self.scaled_object = pg.transform.scale_by(self.image, 2)
 			self.rect = self.image.get_rect(topleft = (pos[0], pos[1] - tile_size))
-			self.hitbox = self.rect.inflate(-8, -24)
-		elif sprite_type == 'large_object':
+		elif sprite_type == 'enemy':
 			self.rect = self.image.get_rect(topleft = (pos[0], pos[1] - tile_size))
-			self.hitbox = self.rect.inflate(-8, -48)
 		else:
 			self.rect = self.image.get_rect(topleft = pos)
-			self.hitbox = self.rect.inflate(-8, -24)
-# TODO Currently unused, could be turned into a pickup or effect later maybe?
+		self.hitbox = self.rect.inflate(-20, -40)
+
 class Enemy(Tile):
     def __init__(self, pos, groups, graphics):
         super().__init__(pos, groups, 'enemy', graphics)

@@ -11,11 +11,11 @@ class Player(pg.sprite.Sprite):
         self.snowman_group = snowman_group
 
         self.image = pg.image.load('../Main/data/32-bit_placeholders/Player32.png').convert_alpha()
-        self.image_scaled = pg.transform.scale_by(self.image, 2)
-        self.rect = self.image_scaled.get_rect(topleft = pos)
+        self.scaled_image = pg.transform.scale_by(self.image, 2)
+        self.rect = self.scaled_image.get_rect(topleft = pos)
         
         # Adjust once placeholders are not in use
-        self.hitbox = self.rect.inflate(-10, 0)
+        self.hitbox = self.rect.inflate(-37, 0)
         
         # Graphics
         self.import_player_assets()
@@ -26,10 +26,14 @@ class Player(pg.sprite.Sprite):
 
         # Must normalize later
         self.direction = pg.math.Vector2()
-
+        self.cooldown = 0
+        self.end_cooldown = 0
+        self.wait = 10
+        self.end_wait = 100
+        self.combat_wait = 3000
         self.speed = 5
         self.cooldown = 0
-        self.wait = 150
+        self.wait = 100
         self.throwing = False
         self.snowball_cooldown = 721
         self.snowball_time = None
@@ -37,6 +41,8 @@ class Player(pg.sprite.Sprite):
         self.vel = pg.math.Vector2(0, 0)
         self.throwing = False
         self.talk = False
+        self.talking = False
+        self.end_talk = False
         self.creeper1 = False
 
 
@@ -54,7 +60,9 @@ class Player(pg.sprite.Sprite):
 
 
     def input(self):
-        self.talk = False
+        self.cooldown += 2
+        if not self.talking:
+            self.talk = False
         keys = pg.key.get_pressed()
 
         # Reset the direction vector
@@ -74,13 +82,23 @@ class Player(pg.sprite.Sprite):
         elif keys[pg.K_a]:
             self.direction.x = -1
             self.status = 'left'
-            
+       
         if keys[pg.K_SPACE]:
-            if self.talk == False:
-                self.talk = True
-        if keys[pg.K_ESCAPE]:
-                self.talk = False
+            if self.cooldown > self.wait: 
+                if self.end_talk:
+                    self.talk = False
+                    self.cooldown = 0
+                    self.end_talk = False
+            
+                if not self.talking:
+                    if not self.talk:
+                        self.talk = True
+                self.cooldown = 0
+            
+            if self.talking and not self.end_talk:
+                self.talking = False
 
+        
 
         # Normalize the direction vector only if it is not the zero vector
         if self.direction.magnitude() != 0:
@@ -153,10 +171,17 @@ class Player(pg.sprite.Sprite):
                 if sprite.sprite_type == 'enemy' and self.rect.colliderect(sprite.rect):
                     pass
                 if sprite.sprite_type == 'npc' and self.rect.colliderect(sprite.rect) and self.talk:
+                    self.cooldown += 1
                     renderTextCenteredAt('Black Square Says:    This should theoretically split the text into lines that actually fit on the page. Combine it with a textbox art, and this could look good.', font, 'White', 500, 650, screen, 600, 250)
-                    self.creeper1 = True
+                    if self.cooldown > self.combat_wait:
+                        self.creeper1 = True
                 if sprite.sprite_type == 'npc2' and self.rect.colliderect(sprite.rect) and self.talk:
                     renderTextCenteredAt('Alien Ship Says:      no way this actually works first try right guys? no way', font, 'White', 500, 650, screen, 600, 250)
+                    self.talking = True
+                    self.end_cooldown += 1
+                    print(self.end_cooldown, self.end_wait)
+                    if self.end_cooldown > self.end_wait:
+                        self.end_talk = True
                     
 
 

@@ -35,6 +35,7 @@ def import_cut_graphics(path):
             x = col * tile_size
             y = row * tile_size
 
+            # Creates 64 x 64 Surface
             new_surf = pg.Surface((tile_size, tile_size), pg.SRCALPHA)
             new_surf.blit(surface, (0, 0), pg.Rect(x, y, tile_size, tile_size))
             cut_tiles.append(new_surf)
