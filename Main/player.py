@@ -12,16 +12,17 @@ class Player(pg.sprite.Sprite):
         super().__init__(groups)
         self.snowman_group = snowman_group
 
-        self.image = pg.image.load('../Main/data/32-bit_placeholders/Player.png').convert_alpha()
+        self.image = pg.image.load('../Main/data/32-bit_placeholders/tile000.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
         
         # Adjust once placeholders are not in use
-        self.hitbox = self.rect.inflate(-37, 0)
+        self.hitbox = self.rect.inflate(-29, -11)
         
         # Graphics
         self.import_player_assets()
         self.status = 'down'
         self.frame_index = 0
+
         # Change later for sprite animation
         self.animation_speed = 0.15
 
@@ -52,15 +53,16 @@ class Player(pg.sprite.Sprite):
 
     # main character sprites and animation
     def import_player_assets(self):
-        character_path = '../Overworld/data/player/'
+        character_path = '../Main/data/player/'
         # TODO Get animation states, and import into self.animations
         self.animations = {'up': [], 'down': [], 'left': [], 'right': [],
-                           'right_idle': [], 'left_idle': [], 'up_idle': [], 'down_idle': [],
-                           'right_throw': [], 'left_throw': [], 'up_throw': [], 'down_throw': []
+                           'right_idle': [], 'left_idle': [], 'up_idle': [], 'down_idle': []
+                        #    'right_throw': [], 'left_throw': [], 'up_throw': [], 'down_throw': []
                            }
         for animation in self.animations.keys():
             full_path = character_path + animation
             self.animations[animation] = import_folder(full_path)
+            print(self.animations[animation], full_path)
 
 
     def input(self):
@@ -155,14 +157,14 @@ class Player(pg.sprite.Sprite):
         if self.throwing:
             self.direction.x = 0
             self.direction.y = 0
-            if not 'throw' in self.status:
-                if 'idle' in self.status:
-                    self.status = self.status.replace('_idle', '_throw')
-                else:
-                    self.status = self.status + '_throw'
-        else:
-            if 'throw' in self.status:
-              self.status = self.status.replace('_throw', '')
+            # if not 'throw' in self.status:
+        #         if 'idle' in self.status:
+        #             self.status = self.status.replace('_idle', '_throw')
+        #         else:
+        #             self.status = self.status + '_throw'
+        # else:
+        #     if 'throw' in self.status:
+        #       self.status = self.status.replace('_throw', '')
 
     def handle_event(self, event):
         if event.type == pg.KEYDOWN:
@@ -261,16 +263,17 @@ class Player(pg.sprite.Sprite):
                 self.throwing = False
 
     def animate(self):
-        animation = self.animations[self.status]
+            if not self.throwing:
+                animation = self.animations[self.status]
 
-        # Frame index looped over
-        self.frame_index += self.animation_speed
-        if self.frame_index >= len(animation):
-            self.frame_index = 0
+                # Frame index looped over
+                self.frame_index += self.animation_speed
+                if self.frame_index >= len(animation):
+                    self.frame_index = 0
 
-        # Set image
-        self.image = animation[int(self.frame_index)]
-        self.rect = self.image.get_rect(center = self.hitbox.center)
+                # Set image
+                self.image = animation[int(self.frame_index)]
+                self.rect = self.image.get_rect(center = self.hitbox.center)
 
     def launch_snowball(self):
         if not self.throwing and (self.snowball_time is None or pg.time.get_ticks() - self.snowball_time > self.snowball_cooldown):
@@ -301,6 +304,7 @@ class Player(pg.sprite.Sprite):
         self.input()
         self.cooldowns()
         self.get_status()
+        self.animate()
 
         # Move the player based on the input
         self.rect.x += self.direction.x * self.speed
