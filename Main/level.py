@@ -96,6 +96,7 @@ class Level():
 
         # Sort sprites based on y-coordinate
         sprites = sorted(self.visible_sprites.sprites(), key=lambda sprite: sprite.rect.centery)
+        debug(self.player.status)
 
         # Draw sprites below and at player's level
         for sprite in sprites:

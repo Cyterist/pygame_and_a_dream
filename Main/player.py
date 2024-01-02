@@ -56,8 +56,8 @@ class Player(pg.sprite.Sprite):
         character_path = '../Main/data/player/'
         # TODO Get animation states, and import into self.animations
         self.animations = {'up': [], 'down': [], 'left': [], 'right': [],
-                           'right_idle': [], 'left_idle': [], 'up_idle': [], 'down_idle': []
-                        #    'right_throw': [], 'left_throw': [], 'up_throw': [], 'down_throw': []
+                           'right_idle': [], 'left_idle': [], 'up_idle': [], 'down_idle': [],
+                           'right_throw': [], 'left_throw': [], 'up_throw': [], 'down_throw': []
                            }
         for animation in self.animations.keys():
             full_path = character_path + animation
@@ -78,6 +78,8 @@ class Player(pg.sprite.Sprite):
         if keys[pg.K_w]:
             self.direction.y = -1
             self.status = 'up'
+            if self.snowball.direction == pg.math.Vector2(0, -1):
+                self.status = 'up'
         elif keys[pg.K_s]:
             self.direction.y = 1
             self.status = 'down'
@@ -157,14 +159,14 @@ class Player(pg.sprite.Sprite):
         if self.throwing:
             self.direction.x = 0
             self.direction.y = 0
-            # if not 'throw' in self.status:
-        #         if 'idle' in self.status:
-        #             self.status = self.status.replace('_idle', '_throw')
-        #         else:
-        #             self.status = self.status + '_throw'
-        # else:
-        #     if 'throw' in self.status:
-        #       self.status = self.status.replace('_throw', '')
+            if not 'throw' in self.status:
+                if 'idle' in self.status:
+                    self.status = self.status.replace('_idle', '_throw')
+                else:
+                    self.status = self.status + '_throw'
+        else:
+            if 'throw' in self.status:
+              self.status = self.status.replace('_throw', '')
 
     def handle_event(self, event):
         if event.type == pg.KEYDOWN:
@@ -263,17 +265,73 @@ class Player(pg.sprite.Sprite):
                 self.throwing = False
 
     def animate(self):
-            if not self.throwing:
-                animation = self.animations[self.status]
+        if not self.throwing:
+            animation = self.animations[self.status]
 
+            
+            # Frame index looped over
+            self.frame_index += self.animation_speed
+            if self.frame_index >= len(animation):
+                self.frame_index = 0
+
+            
+            # Set image
+            self.image = animation[int(self.frame_index)]
+            self.rect = self.image.get_rect(center = self.hitbox.center)
+        elif self.throwing:
+            if self.status == 'up_throw' and self.snowball.direction == pg.math.Vector2(0, -1):
+                animation = self.animations['up_throw']
+
+            
                 # Frame index looped over
                 self.frame_index += self.animation_speed
                 if self.frame_index >= len(animation):
                     self.frame_index = 0
 
+                
                 # Set image
                 self.image = animation[int(self.frame_index)]
                 self.rect = self.image.get_rect(center = self.hitbox.center)
+            elif self.status == 'left_throw' and self.snowball.direction == pg.math.Vector2(-1, 0):
+                animation = self.animations[self.status]
+
+            
+                # Frame index looped over
+                self.frame_index += self.animation_speed
+                if self.frame_index >= len(animation):
+                    self.frame_index = 0
+
+                
+                # Set image
+                self.image = animation[int(self.frame_index)]
+                self.rect = self.image.get_rect(center = self.hitbox.center)
+            elif self.status == 'right_throw' and self.snowball.direction == pg.math.Vector2(1, 0):
+                animation = self.animations[self.status]
+
+            
+                # Frame index looped over
+                self.frame_index += self.animation_speed
+                if self.frame_index >= len(animation):
+                    self.frame_index = 0
+
+                
+                # Set image
+                self.image = animation[int(self.frame_index)]
+                self.rect = self.image.get_rect(center = self.hitbox.center)
+            elif self.status == 'down_throw' and self.snowball.direction == pg.math.Vector2(0, 1):
+                animation = self.animations[self.status]
+
+            
+                # Frame index looped over
+                self.frame_index += self.animation_speed
+                if self.frame_index >= len(animation):
+                    self.frame_index = 0
+
+                
+                # Set image
+                self.image = animation[int(self.frame_index)]
+                self.rect = self.image.get_rect(center = self.hitbox.center)
+
 
     def launch_snowball(self):
         if not self.throwing and (self.snowball_time is None or pg.time.get_ticks() - self.snowball_time > self.snowball_cooldown):
@@ -282,16 +340,13 @@ class Player(pg.sprite.Sprite):
 
             prev_direction = self.direction
             prev_speed = self.speed
-            
-            # Set the initial position of the snowball
-            
 
             # Update the snowball's position without setting it as thrown
             self.snowball.update_position(self.snowman_group)
 
             self.direction = pg.math.Vector2(0, 0)
             self.speed = 0
-            # self.status += '_throw'
+            self.status += '_throw'
             self.snowball.rect.center = self.rect.center
             self.snowball.thrown = True
 
@@ -305,6 +360,7 @@ class Player(pg.sprite.Sprite):
         self.cooldowns()
         self.get_status()
         self.animate()
+        debug(self.status)
 
         # Move the player based on the input
         self.rect.x += self.direction.x * self.speed
@@ -312,6 +368,6 @@ class Player(pg.sprite.Sprite):
 
         # Update snowball position if thrown, pass snowman group to check for collisions
         if self.snowball.thrown:
-            self.snowball.update_position(self.snowman_group)  # Pass snowman group
+            self.snowball.update_position(self.snowman_group)
             self.snowball_thrown = False
 
