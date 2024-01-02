@@ -38,7 +38,6 @@ class Game:
                 self.combat.run(fights['creeper1']['screen'], fights['creeper1']['enemies'], fights['creeper1']['total_chars'], fights['creeper1']['health_bars'])
             if fights['creeper2']['fight_begun']:
                 self.combat.run(fights['creeper2']['screen'], fights['creeper2']['enemies'], fights['creeper2']['total_chars'], fights['creeper2']['health_bars'])
-                print(self.combat.running, self.combat.end_combat)
                 if self.combat.running == False:
                     self.combat.running = True
                     self.combat.run(fights['creeper2']['screen'], fights['creeper2']['enemies'], fights['creeper2']['total_chars'], fights['creeper2']['health_bars'])

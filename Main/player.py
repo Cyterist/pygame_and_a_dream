@@ -62,7 +62,6 @@ class Player(pg.sprite.Sprite):
         for animation in self.animations.keys():
             full_path = character_path + animation
             self.animations[animation] = import_folder(full_path)
-            print(self.animations[animation], full_path)
 
 
     def input(self):

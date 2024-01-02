@@ -13,7 +13,8 @@ class Level():
         # Sprite Groups
         self.visible_sprites = YSortedCameraGroup()
         self.obstacle_sprites = pg.sprite.Group()
-        self.enemy_group = [] 
+        self.enemy_group = []
+        self.map = 'main'
 
         # sprite setup
         self.snowman_group = pg.sprite.Group()
@@ -25,27 +26,44 @@ class Level():
         self.offset = pg.math.Vector2() 
 
         # creating the floor
-        self.floor_surf = pg.image.load('../Main/data/Level_0/test_map.png').convert()
+        self.floor_surf = pg.image.load('../Main/data/Level_1/map.png').convert()
         self.floor_rect = self.floor_surf.get_rect(topleft=(0, 0))
 
     # Map references in maps
     def create_map(self):
         # Key is style, value is layout
-        layouts = {
-            'boundary': import_csv_layout('../Main/maps/Level_0/test_map_floorblocks.csv'),
-            'snowman': import_csv_layout('../Main/maps/Level_0/test_map_snowman.csv'),
-            'object': import_csv_layout('../Main/maps/Level_0/test_map_objects.csv'),
-            'enemy': import_csv_layout('../Main/maps/Level_0/test_map_enemy.csv'),
-            'npc': import_csv_layout('../Main/maps/Level_0/test_map_npc.csv'),
-            'npc2': import_csv_layout('../Main/maps/Level_0/test_map_npc2.csv')
-        }
-        graphics = {
-            'snowman': pg.image.load('../Main/data/Level_0/snowman.png').convert_alpha(),
-            'objects': import_cut_graphics('../Main/data/Level_0/fence_tiles64.png'),
-            'enemy': import_cut_graphics('../Main/data/Level_0/enemy.png'),
-            'npc': import_cut_graphics('../Main/data/Level_0/player.png'),
-            'npc2': pg.image.load('../Main/data/Level_0/alienship64.png').convert()
-        }
+        if self.map == 'test':
+            layouts = {
+                'boundary': import_csv_layout('../Main/maps/Level_0/test_map_floorblocks.csv'),
+                'snowman': import_csv_layout('../Main/maps/Level_0/test_map_snowman.csv'),
+                'object': import_csv_layout('../Main/maps/Level_0/test_map_objects.csv'),
+                'enemy': import_csv_layout('../Main/maps/Level_0/test_map_enemy.csv'),
+                'npc': import_csv_layout('../Main/maps/Level_0/test_map_npc.csv'),
+                'npc2': import_csv_layout('../Main/maps/Level_0/test_map_npc2.csv')
+            }
+            graphics = {
+                'snowman': pg.image.load('../Main/data/Level_0/snowman.png').convert_alpha(),
+                'objects': import_cut_graphics('../Main/data/Level_0/fence_tiles64.png'),
+                'enemy': import_cut_graphics('../Main/data/Level_0/enemy.png'),
+                'npc': import_cut_graphics('../Main/data/Level_0/player.png'),
+                'npc2': pg.image.load('../Main/data/Level_0/alienship64.png').convert()
+            }
+        elif self.map == 'main':
+            layouts = {
+                'boundary': import_csv_layout('../Main/maps/Level_1/_level_1_floorblocks.csv'),
+                'snowman': import_csv_layout('../Main/maps/Level_1/_level_1_desobjects.csv'),
+                # 'object': import_csv_layout('../Main/maps/Level_1/_level_1_objects.csv'),
+                # 'enemy': import_csv_layout('../Main/maps/Level_1/_level_1_enemy.csv'),
+                'npc': import_csv_layout('../Main/maps/Level_1/_level_1_npc.csv')
+                # 'npc2': import_csv_layout('../Main/maps/Level_1/_level_1_npc2.csv')
+            }
+            graphics = {
+                # 'snowman': pg.image.load('../Main/data/Level_1/sign-post64.png').convert_alpha(),
+                # 'objects': import_cut_graphics('../Main/data/Level_0/fence_tiles64.png'),
+                # 'enemy': import_cut_graphics('../Main/data/Level_0/enemy.png'),
+                'npc': pg.image.load('../Main/data/Level_1/sign-post64.png').convert_alpha()
+                # 'npc2': pg.image.load('../Main/data/Level_0/alienship64.png').convert()
+            }
         for style, layout in layouts.items():
             for row_index, row in enumerate(layout):
                 for col_index, col in enumerate(row):
@@ -67,20 +85,20 @@ class Level():
                         #     enemy = Enemy((x, y), [self.visible_sprites, self.obstacle_sprites], enemy_tile)
                         #     self.enemy_group.append(enemy)
                         if style == 'npc':
-                            npc_tile = graphics['npc'][int(col)]
+                            npc_tile = graphics['npc']
                             Tile((x, y), [self.visible_sprites, self.snowman_group, self.obstacle_sprites], 'npc', npc_tile)
-                        if style == 'npc2':
-                            npc2_tile = graphics['npc2']
-                            Tile((x, y), [self.visible_sprites, self.snowman_group, self.obstacle_sprites], 'npc2', npc2_tile)
-
-                                
-                            
+                        # if style == 'npc2':
+                        #     npc2_tile = graphics['npc2']
+                        #     Tile((x, y), [self.visible_sprites, self.snowman_group, self.obstacle_sprites], 'npc2', npc2_tile)
         
 
         # Initialize snowball and player sprites
+        self.player = Player((5504, 4096), [self.visible_sprites], self.obstacle_sprites, self.snowman_group, self)
         self.snowball = Snowball((-1000, -1000), [self.visible_sprites], self.obstacle_sprites)
-        self.player = Player((400, 600), [self.visible_sprites], self.obstacle_sprites, self.snowman_group, self)
+
         self.player.snowball = self.snowball
+
+        
 
     def run(self):
         # update and draw the game
@@ -147,7 +165,7 @@ class YSortedCameraGroup(pg.sprite.Group):
         self.offset = pg.math.Vector2()
 
         # Create the floor surface outside of the update method
-        self.floor_surf = pg.image.load('../Main/data/Level_0/test_map.png').convert()
+        self.floor_surf = pg.image.load('../Main/data/Level_1/map.png').convert()
         self.floor_rect = self.floor_surf.get_rect(topleft=(0, 0))
 
     def custom_draw(self, player):

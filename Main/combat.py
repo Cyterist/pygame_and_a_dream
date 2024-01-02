@@ -77,7 +77,6 @@ class Combat():
 
         self.running = True
         while self.running and not self.end_combat:
-            print('combat is working')
             create_default_screen(screen, enemies)
 
             self.mouse_up = False
@@ -123,7 +122,6 @@ class Combat():
                         for enemy in enemies:
                             if enemy.rect.collidepoint(self.mouse_pos) and self.mouse_up and enemy.alive:
                                 self.target = enemy
-                                print(self.target)
 
                     if self.attack == True and self.target != None:
                         for bar in attack_bars:
