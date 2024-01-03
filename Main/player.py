@@ -180,7 +180,6 @@ class Player(pg.sprite.Sprite):
                 # if sprite.sprite_type == 'enemy' and self.rect.colliderect(sprite.rect):
                 #     pass
                 if sprite.sprite_type == 'npc' and self.rect.colliderect(sprite.rect) and self.talk:
-                    print('in contact', self.talking, self.talk, self.combat_cooldown, self.combat_wait)
                     if not fights['creeper1']['fight_won']:
                         self.talking = True
                         self.combat_cooldown += 1
@@ -208,7 +207,6 @@ class Player(pg.sprite.Sprite):
                         self.talking = True
                         self.combat_cooldown += 1
                         if self.combat_cooldown <= 251:
-                            print('no other enemy fought yet')
                             renderTextCenteredAt('Alien Space Ship Says:      This formatting needs redone', font, 'White', 500, 650, screen, 600, 250)
                             if self.combat_cooldown >= self.combat_wait:
                                 self.creeper2 = True
@@ -229,7 +227,6 @@ class Player(pg.sprite.Sprite):
                                 self.talking = False
                                 
                                 fights['creeper2']['fight_begun'] = True
-                                print(fights['creeper2']['fight_begun'])
                                 
                     if fights['creeper2']['fight_won']:
                             self.combat_cooldown = 0

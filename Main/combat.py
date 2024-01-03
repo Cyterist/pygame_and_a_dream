@@ -82,12 +82,10 @@ class Combat():
     # Main combat function
 
     def run(self, screen, enemies, total_chars, health_bars):
-        print('pre-combat loading')
         if not fights['creeper1']['fight_begun'] and not fights['creeper2']['fight_begun']:
             self.win = False
             self.running = False
             self.cooldown = 0
-            print('values reset')
 
         self.attack_btn = UIButton(center_position=(
             650, 608), font_size=30, text_color=WHITE, text="Attack")
@@ -97,7 +95,6 @@ class Combat():
             650, 558), font_size=30, text_color=WHITE, text="Collect Snow")
         if fights['creeper1']['fight_begun'] or fights['creeper2']['fight_begun']:
             self.start_combat()
-            print(f'creeper1:{fights["creeper1"]["fight_begun"]}, creeper2:{fights["creeper2"]["fight_begun"]}')
             while self.running and not self.end_combat:
                 print('combat running')
                 create_default_screen(screen, enemies)
