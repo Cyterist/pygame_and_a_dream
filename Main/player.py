@@ -177,8 +177,8 @@ class Player(pg.sprite.Sprite):
     def collision(self, direction):
         if direction == 'horizontal':
             for sprite in self.obstacle_sprites:
-                if sprite.sprite_type == 'enemy' and self.rect.colliderect(sprite.rect):
-                    pass
+                # if sprite.sprite_type == 'enemy' and self.rect.colliderect(sprite.rect):
+                #     pass
                 if sprite.sprite_type == 'npc' and self.rect.colliderect(sprite.rect) and self.talk:
                     print('in contact', self.talking, self.talk, self.combat_cooldown, self.combat_wait)
                     if not fights['creeper1']['fight_won']:
@@ -193,6 +193,7 @@ class Player(pg.sprite.Sprite):
                                 self.talking = False
                                 fights['creeper1']['fight_begun'] = True
                     elif fights['creeper1']['fight_won']:
+                            fights['creeper1']['fight_begun'] = False
                             self.creeper1 = False
                             self.combat_cooldown = 0
                             self.talking = True
@@ -202,7 +203,7 @@ class Player(pg.sprite.Sprite):
                                 if self.end_cooldown > self.end_wait:
                                     self.end_talk = True
 
-                if sprite.sprite_type == 'npc2' and self.rect.colliderect(sprite.rect) and self.talk:
+                elif sprite.sprite_type == 'npc2' and self.rect.colliderect(sprite.rect) and self.talk:
                     if not fights['creeper2']['fight_won'] and not fights['creeper1']['fight_won']:
                         self.talking = True
                         self.combat_cooldown += 1
@@ -215,7 +216,8 @@ class Player(pg.sprite.Sprite):
                                 self.talk = False
                                 self.talking = False
                                 fights['creeper2']['fight_begun'] = True
-                    elif fights['creeper1']['fight_won']:
+                    if fights['creeper1']['fight_won']:
+                        fights['creeper1']['fight_begun'] = False
                         self.talking = True
                         self.combat_cooldown += 1
                         if self.combat_cooldown <= 251:
@@ -225,9 +227,11 @@ class Player(pg.sprite.Sprite):
                                 self.combat_cooldown = 251
                                 self.talk = False
                                 self.talking = False
+                                
                                 fights['creeper2']['fight_begun'] = True
                                 print(fights['creeper2']['fight_begun'])
-                    elif fights['creeper2']['fight_won']:
+                                
+                    if fights['creeper2']['fight_won']:
                             self.combat_cooldown = 0
                             self.talking = True
                             if self.talk:

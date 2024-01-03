@@ -5,6 +5,7 @@ from player import Player
 from snowball import Snowball
 from debug import debug
 from support import *
+from combat import Combat
 
 
 class Level():
@@ -15,6 +16,7 @@ class Level():
         self.obstacle_sprites = pg.sprite.Group()
         self.enemy_group = []
         self.map = 'main'
+        self.combat = Combat()
 
         # sprite setup
         self.snowman_group = pg.sprite.Group()
@@ -56,8 +58,8 @@ class Level():
                 'snowman': import_csv_layout('../Main/maps/Level_1/_level_1_desobjects.csv'),
                 # 'object': import_csv_layout('../Main/maps/Level_1/_level_1_objects.csv'),
                 # 'enemy': import_csv_layout('../Main/maps/Level_1/_level_1_enemy.csv'),
-                'npc': import_csv_layout('../Main/maps/Level_1/_level_1_npc.csv')
-                # 'npc2': import_csv_layout('../Main/maps/Level_1/_level_1_npc2.csv')
+                'npc': import_csv_layout('../Main/maps/Level_1/_level_1_npc.csv'),
+                'npc2': import_csv_layout('../Main/maps/Level_1/_level_1_npc2.csv')
             }
             # Tile graphics
             graphics = {
@@ -65,8 +67,8 @@ class Level():
                 'decorations': import_folder('../Main/data/Level_1/decorations/'),
                 'objects': import_folder('../Main/data/Level_1/objects/'),
                 # 'enemy': import_cut_graphics('../Main/data/Level_0/enemy.png'),
-                'npc': pg.image.load('../Main/data/Level_1/sign-post64.png').convert_alpha()
-                # 'npc2': pg.image.load('../Main/data/Level_0/alienship64.png').convert()
+                'npc': pg.image.load('../Main/data/Level_1/sign-post64.png').convert_alpha(),
+                'npc2': pg.image.load('../Main/data/Level_1/Player.png').convert()
             }
         
         # Draw map and render Tiles
@@ -91,7 +93,6 @@ class Level():
                             Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'objects', surf)
                         if style == 'snowman':
                             # Add snowman sprites to both snowman_group and obstacle_sprites
-                            print(graphics['snowman'])
                             snowman_tile = graphics['snowman'][int(col)]
                             Tile((x, y), [self.visible_sprites, self.snowman_group, self.obstacle_sprites], 'snowman', snowman_tile)
                         # if style == 'enemy':
@@ -101,9 +102,9 @@ class Level():
                         if style == 'npc':
                             npc_tile = graphics['npc']
                             Tile((x, y), [self.visible_sprites, self.snowman_group, self.obstacle_sprites], 'npc', npc_tile)
-                        # if style == 'npc2':
-                        #     npc2_tile = graphics['npc2']
-                        #     Tile((x, y), [self.visible_sprites, self.snowman_group, self.obstacle_sprites], 'npc2', npc2_tile)
+                        if style == 'npc2':
+                            npc2_tile = graphics['npc2']
+                            Tile((x, y), [self.visible_sprites, self.snowman_group, self.obstacle_sprites], 'npc2', npc2_tile)
         
 
         # Initialize snowball and player sprites
@@ -144,9 +145,8 @@ class Level():
         if self.player.snowball.thrown:
             self.player.snowball.update_position(self.obstacle_sprites)
         
-        self.creeper1 = self.player.creeper1
-
-        self.creeper2 = self.player.creeper2
+        self.creeper1 = self.player.creeper1 if not self.combat.running else False
+        self.creeper2 = self.player.creeper2 if not self.combat.running else False
 
         # Draw sprites above player's level
         for sprite in sprites:
