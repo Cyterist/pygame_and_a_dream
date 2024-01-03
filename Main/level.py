@@ -49,21 +49,27 @@ class Level():
                 'npc2': pg.image.load('../Main/data/Level_0/alienship64.png').convert()
             }
         elif self.map == 'main':
+            # Locations of tiles
             layouts = {
                 'boundary': import_csv_layout('../Main/maps/Level_1/_level_1_floorblocks.csv'),
+                'decorations': import_csv_layout('../Main/maps/Level_1/_level_1_decorations.csv'),
                 'snowman': import_csv_layout('../Main/maps/Level_1/_level_1_desobjects.csv'),
                 # 'object': import_csv_layout('../Main/maps/Level_1/_level_1_objects.csv'),
                 # 'enemy': import_csv_layout('../Main/maps/Level_1/_level_1_enemy.csv'),
                 'npc': import_csv_layout('../Main/maps/Level_1/_level_1_npc.csv')
                 # 'npc2': import_csv_layout('../Main/maps/Level_1/_level_1_npc2.csv')
             }
+            # Tile graphics
             graphics = {
                 'snowman': import_folder('../Main/data/Level_1/snowmen/'),
+                'decorations': import_folder('../Main/data/Level_1/decorations/'),
                 'objects': import_folder('../Main/data/Level_1/objects/'),
                 # 'enemy': import_cut_graphics('../Main/data/Level_0/enemy.png'),
                 'npc': pg.image.load('../Main/data/Level_1/sign-post64.png').convert_alpha()
                 # 'npc2': pg.image.load('../Main/data/Level_0/alienship64.png').convert()
             }
+        
+        # Draw map and render Tiles
         for style, layout in layouts.items():
             for row_index, row in enumerate(layout):
                 for col_index, col in enumerate(row):
@@ -72,6 +78,13 @@ class Level():
                         y = row_index * tile_size
                         if style == 'boundary':
                             Tile((x, y), [self.obstacle_sprites], 'invisible')
+                        if style == 'decorations':
+                            # Would have to redesign import_folder() to make this work, so the -3 is a placeholder to set it to count the graphics from 0
+                            decorations = graphics['decorations'][int(col) - 3]
+                            if int(col) - 3 == 1:
+                                Tile((x, y - 192), [self.visible_sprites], 'large_decorations', decorations)
+                            if int(col) - 3 == 0:
+                                Tile((x, y - 64), [self.visible_sprites], 'small_decorations', decorations)
                         if style == 'object':
                             # create object tile
                             surf = graphics['objects'][int(col)]
