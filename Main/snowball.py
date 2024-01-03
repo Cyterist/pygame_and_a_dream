@@ -12,7 +12,7 @@ class Snowball(pg.sprite.Sprite):
         self.speed = 7.1
         self.thrown = False
         self.distance_traveled = 0
-        self.max_distance = 640  # Adjust as needed
+        self.max_distance = 615  # Adjust as needed
         self.initial_pos = pos
 
     def launch_snowball(self):

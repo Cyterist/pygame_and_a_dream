@@ -58,8 +58,8 @@ class Level():
                 # 'npc2': import_csv_layout('../Main/maps/Level_1/_level_1_npc2.csv')
             }
             graphics = {
-                # 'snowman': pg.image.load('../Main/data/Level_1/sign-post64.png').convert_alpha(),
-                # 'objects': import_cut_graphics('../Main/data/Level_0/fence_tiles64.png'),
+                'snowman': import_folder('../Main/data/Level_1/snowmen/'),
+                'objects': import_folder('../Main/data/Level_1/objects/'),
                 # 'enemy': import_cut_graphics('../Main/data/Level_0/enemy.png'),
                 'npc': pg.image.load('../Main/data/Level_1/sign-post64.png').convert_alpha()
                 # 'npc2': pg.image.load('../Main/data/Level_0/alienship64.png').convert()
@@ -78,7 +78,8 @@ class Level():
                             Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'objects', surf)
                         if style == 'snowman':
                             # Add snowman sprites to both snowman_group and obstacle_sprites
-                            snowman_tile = graphics['snowman']
+                            print(graphics['snowman'])
+                            snowman_tile = graphics['snowman'][int(col)]
                             Tile((x, y), [self.visible_sprites, self.snowman_group, self.obstacle_sprites], 'snowman', snowman_tile)
                         # if style == 'enemy':
                         #     enemy_tile = graphics['enemy'][int(col)]
