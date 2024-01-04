@@ -10,7 +10,7 @@ dialog = {
         'line2': 'You won the fight!'
     },
     'npc2':{
-        'n': 'John',
+        'n': 'Jimmy',
         'line1': 'Theme of giving? More like giving up',
         'line2': "You didn't give up!?"
     }

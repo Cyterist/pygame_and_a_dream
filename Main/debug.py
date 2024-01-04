@@ -57,18 +57,17 @@ def renderTextCenteredAt(npc_name, text, screen, font = font, color = 'White', x
     name_font = pg.font.Font('EquipmentPro.ttf', name_font_size)
     name_surface = name_font.render(npc_name, True, color)
     name_x = x - name_surface.get_width() / 2
-    name_y = box_y - name_surface.get_height() - 10  # Adjust for spacing
     screen.blit(name_surface, (name_x, 435))
     
 
     # Render each line of text
-    y_offset = 0
+    y_offset = -150
     for line in lines:
         fw, fh = font.size(line)
 
         # (tx, ty) is the top-left of the font surface
-        tx = x - box_width / 2  # Adjusted to left-align the text within the box
-        ty = y + y_offset - total_height / 2 - 45  # Adjust for the text margins
+        tx = (x - box_width / 2) + 5  
+        ty = y + y_offset
 
         font_surface = font.render(line, True, color)
         screen.blit(font_surface, (tx, ty))

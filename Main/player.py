@@ -220,7 +220,7 @@ class Player(pg.sprite.Sprite):
                         self.talking = True
                         self.combat_cooldown += 1
                         if self.combat_cooldown <= 251:
-                            renderTextCenteredAt('Alien Space Ship Says:      This formatting needs redone', font, 'White', 500, 650, screen, 600, 250)
+                            renderTextCenteredAt(dialog['npc2']['n'], dialog['npc2']['line1'], screen)
                             if self.combat_cooldown >= self.combat_wait:
                                 self.creeper2 = True
                                 self.combat_cooldown = 251
@@ -233,7 +233,7 @@ class Player(pg.sprite.Sprite):
                             self.combat_cooldown = 0
                             self.talking = True
                             if self.talk:
-                                renderTextCenteredAt('You won the fight!',font, 'White', 500, 650, screen, 600, 250)
+                                renderTextCenteredAt(dialog['npc2']['n'], dialog['npc2']['line2'], screen)
                                 self.end_cooldown += 1
                                 if self.end_cooldown > self.end_wait:
                                     self.end_talk = True
