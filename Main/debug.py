@@ -1,6 +1,6 @@
 import pygame as pg
 pg.init()
-font = pg.font.Font(None, 52)
+font = pg.font.Font('EquipmentPro.ttf', 52)
 
 
 def debug(info, y=10, x=10):
@@ -44,21 +44,21 @@ def renderTextCenteredAt(npc_name, text, screen, font = font, color = 'White', x
     box_width = 900
     box_height = max(total_height, allowed_height) - 150
     box_x = x - box_width / 2
-    box_y = y - total_height / 2 - 50  # Adjust for the text margins
+    box_y = y - total_height / 2 - 40  # Adjust for the text margins
 
     # Render the box
     box_rect = pg.Rect(box_x, box_y, box_width, box_height)
     pg.draw.rect(screen, (74, 85, 85), box_rect)  # Change color as needed
 
     # Render the NPC's name above the text
-    name_rect = pg.Rect(50, 485, box_width, box_height)
+    name_rect = pg.Rect(50, 425, 900, 285)
     pg.draw.rect(screen, (74, 85, 85), name_rect)
     name_font_size = 60
-    name_font = pg.font.SysFont(None, name_font_size)
+    name_font = pg.font.Font('EquipmentPro.ttf', name_font_size)
     name_surface = name_font.render(npc_name, True, color)
     name_x = x - name_surface.get_width() / 2
     name_y = box_y - name_surface.get_height() - 10  # Adjust for spacing
-    screen.blit(name_surface, (name_x, name_y))
+    screen.blit(name_surface, (name_x, 435))
     
 
     # Render each line of text

@@ -208,7 +208,7 @@ class Player(pg.sprite.Sprite):
                         self.talking = True
                         self.combat_cooldown += 1
                         if self.combat_cooldown <= 251:
-                            renderTextCenteredAt('John', dialog['npc2']['line1'], font, 'White', screen)
+                            renderTextCenteredAt('John', dialog['npc2']['line1'], screen)
                             if self.combat_cooldown >= self.combat_wait:
                                 self.creeper2 = True
                                 self.combat_cooldown = 251
