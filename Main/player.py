@@ -5,6 +5,7 @@ from snowball import *
 from debug import *
 from combat import *
 from fights import *
+from dialog import *
 
 class Player(pg.sprite.Sprite):
 
@@ -184,7 +185,7 @@ class Player(pg.sprite.Sprite):
                         self.talking = True
                         self.combat_cooldown += 1
                         if self.combat_cooldown <= 251:
-                            renderTextCenteredAt('Black Square Says:    This should theoretically split the text into lines that actually fit on the page. Combine it with a textbox art, and this could look good.', font, 'White', 500, 650, screen, 600, 250)
+                            renderTextCenteredAt(dialog['npc1']['n'], dialog['npc1']['line1'], screen)
                             if self.combat_cooldown >= self.combat_wait:
                                 self.creeper1 = True
                                 self.combat_cooldown = 251
@@ -197,7 +198,7 @@ class Player(pg.sprite.Sprite):
                             self.combat_cooldown = 0
                             self.talking = True
                             if self.talk:
-                                renderTextCenteredAt('You won the fight!',font, 'White', 500, 650, screen, 600, 250)
+                                renderTextCenteredAt(dialog['npc1']['n'], dialog['npc1']['line2'], screen)
                                 self.end_cooldown += 1
                                 if self.end_cooldown > self.end_wait:
                                     self.end_talk = True
@@ -207,7 +208,7 @@ class Player(pg.sprite.Sprite):
                         self.talking = True
                         self.combat_cooldown += 1
                         if self.combat_cooldown <= 251:
-                            renderTextCenteredAt('Alien Space Ship Says:      This formatting needs redone', font, 'White', 500, 650, screen, 600, 250)
+                            renderTextCenteredAt('John', dialog['npc2']['line1'], font, 'White', screen)
                             if self.combat_cooldown >= self.combat_wait:
                                 self.creeper2 = True
                                 self.combat_cooldown = 251
