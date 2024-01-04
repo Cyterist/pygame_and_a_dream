@@ -64,7 +64,6 @@ class Snowball(pg.sprite.Sprite):
     def handle_collision(self, collidable_obj):
         for sprite in self.obstacle_sprites:
             if sprite.sprite_type == 'snowman' and self.rect.colliderect(sprite.rect):
-                print(sprite.sprite_type)
                 collidable_obj.kill()  # Destroy the 'snowman' object
                 self.thrown = False
                 self.rect.center = self.initial_pos
@@ -72,11 +71,9 @@ class Snowball(pg.sprite.Sprite):
                 self.obstacle_sprites.remove(sprite)
                 break
             elif sprite.sprite_type == 'objects' and self.rect.colliderect(sprite.rect):
-                print(sprite.sprite_type)
                 self.thrown = False
                 self.distance_traveled = 0
                 self.rect.center = self.initial_pos
                 break
             elif sprite.sprite_type == 'enemy' and self.rect.colliderect(sprite.rect):
-                print(sprite.sprite_type)
-                print('Enemy hit with snowball, begin combat')
+                pass

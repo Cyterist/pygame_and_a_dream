@@ -3,7 +3,7 @@ from information import *
 from tileclass import Tile, Enemy
 from player import Player
 from snowball import Snowball
-from debug import debug
+from debug import *
 from support import *
 from combat import Combat
 
@@ -129,7 +129,6 @@ class Level():
 
         # Sort sprites based on y-coordinate
         sprites = sorted(self.visible_sprites.sprites(), key=lambda sprite: sprite.rect.centery)
-        debug(self.player.status)
 
         # Draw sprites below and at player's level
         for sprite in sprites:

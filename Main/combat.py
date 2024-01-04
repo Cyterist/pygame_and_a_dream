@@ -30,7 +30,7 @@ def create_default_screen(screen, enemies):
 
 
 def create_text(text, text_color, font_size, x, y, screen, bgcolor=None):
-    font = pg.font.SysFont("Arial", font_size)
+    font = pg.font.Font("EquipmentPro.ttf", font_size)
     image = font.render(text, True, text_color, bgcolor)
     screen.blit(image, (x, y))
 
@@ -48,8 +48,9 @@ class Combat():
 
     def __init__(self):
         self.active_char = 1
+        # 100 is one second
         self.win_wait = 150
-        self.wait = 10
+        self.wait = 100
         self.attack = False
         self.ability_1 = False
         self.target = None
@@ -63,6 +64,11 @@ class Combat():
         self.win = False
         self.cooldown = 0
         self.end_combat = False
+    
+    def reset_attack(self):
+        self.red = False
+        self.green = False
+        self.yellow = False
 
     def start_combat(self):
         # Initialize combat state
@@ -96,7 +102,6 @@ class Combat():
         if fights['creeper1']['fight_begun'] or fights['creeper2']['fight_begun']:
             self.start_combat()
             while self.running and not self.end_combat:
-                print('combat running')
                 create_default_screen(screen, enemies)
 
                 self.mouse_up = False
@@ -125,7 +130,8 @@ class Combat():
                         # Check if action was selection
                         if not self.attack and not self.ability_1:
 
-                            create_text("Your Turn", WHITE, 50, 550, 0, screen)
+                            # create_text("Your Turn", WHITE, 50, 550, 0, screen)
+                            textbox_talk('Your Turn!', 50, bg_color=None, x=550, y=0)
 
                             if self.attack_btn.clicked(self.mouse_pos, self.mouse_up):
                                 self.attack = True
@@ -138,7 +144,8 @@ class Combat():
                                 self.active_char += 1
 
                         if self.attack or self.ability_1:
-                            create_text("Select Target", WHITE, 50, 550, 0, screen)
+                            textbox_talk('Select Target', 50, bg_color=None, x=550, y=0)
+                            # create_text("Select Target", WHITE, 50, 550, 0, screen)
                             for enemy in enemies:
                                 if enemy.rect.collidepoint(self.mouse_pos) and self.mouse_up and enemy.alive:
                                     self.target = enemy
@@ -148,7 +155,7 @@ class Combat():
                                 bar.draw(screen)
 
                             if self.white_bar_speed == 0:
-                                self.white_bar_speed = 3
+                                self.white_bar_speed = 1
 
                             white_bar.x += self.white_bar_speed
                             pg.draw.rect(screen, WHITE, white_bar)
@@ -163,27 +170,42 @@ class Combat():
                                 if attack_g.check_collision(white_bar):
                                     self.green = True
 
-                            if self.red == True:
+                            if self.red == True and not self.yellow:
                                 player.attack(self.target, 0)
-                                self.red = False
+                                self.reset_attack()
                                 self.target = None
                                 white_bar.x = 350
                                 self.attack = False
                                 self.active_char += 1
-                            if self.yellow == True:
+                            if self.yellow == True and not self.green:
                                 player.attack(self.target, 3)
-                                self.yellow = False
+                                self.reset_attack()
                                 self.target = None
                                 white_bar.x = 350
                                 self.attack = False
                                 self.active_char += 1
-                            if self.green == True:
+                            if self.green == True and not self.yellow:
                                 player.attack(self.target, 10)
-                                self.green = False
+                                self.reset_attack()
                                 self.target = None
                                 white_bar.x = 350
                                 self.attack = False
                                 self.active_char += 1
+                            if self.red and self.yellow:
+                                player.attack(self.target, 3)
+                                self.reset_attack()
+                                self.target = None
+                                white_bar.x = 350
+                                self.attack = False
+                                self.active_char += 1
+                            if self.yellow and self.green:
+                                player.attack(self.target, 10)
+                                self.reset_attack()
+                                self.target = None
+                                white_bar.x = 350
+                                self.attack = False
+                                self.active_char += 1
+
 
                         if self.ability_1 == True and self.target != None:
                             for bar in hard_bars:
@@ -232,7 +254,10 @@ class Combat():
                 for i, enemy in enumerate(enemies):
                     if self.active_char == 2 + i:
                         if enemy.alive:
-                            create_text("Enemy Turn", WHITE, 50, 550, 0, screen)
+                            textbox_talk('Enemy Turn!', 50, bg_color=None, x=550, y=0)
+                            # TODO Find absolute reference for enemy health bar location, then input whatever action the enemy takes
+                            healthbar_loc = healthbar_list[i]
+                            textbox_talk('Creeper Attacks!', 30, color='Black', x=healthbar_loc.x - 200, y=healthbar_loc.y - 20)
                             self.cooldown += 1
                             if self.cooldown >= self.wait:
                                 enemy.attack(player)

@@ -31,26 +31,26 @@ class Game:
 
             screen.blit(background, (0, 0))
             textbox_talk('Snowball Chronicles', color = 'Black', bg_color = 'White', text_size = 140, x = 170, y = 60)
-            textbox_talk('Press C for controls.', color = 'Black', bg_color = 'White', text_size = 100, x = 275, y = 330)
-            textbox_talk('Press the enter button to start.', color = 'Black', bg_color = 'White', text_size = 100, x = 60, y = 530)
+            textbox_talk('Press C for controls', color = 'Black', bg_color = 'White', text_size = 100, x = 275, y = 330)
+            textbox_talk('Press the enter button to start', color = 'Black', bg_color = 'White', text_size = 100, x = 60, y = 530)
             
-            if self.actions['controls'] and not self.actions['start']:
-                screen.blit(background, (0, 0))
-                textbox_talk('Controls:', color = 'Black', bg_color = 'White', text_size = 140, x = 60, y = 10)
-                textbox_talk('WASD: Movement', color = 'Black', bg_color = 'White', text_size = 100, x = 60, y = 160)
-                textbox_talk('Arrow Keys: Throw Snowball', color = 'Black', bg_color = 'White', text_size = 100, x = 60, y = 260)
-                textbox_talk('SPACE: Interact/Talk/Attack', color = 'Black', bg_color = 'White', text_size = 100, x = 60, y = 360)
-                textbox_talk('LMB: Select Enemy', color = 'Black', bg_color = 'White', text_size = 100, x = 60, y = 460)
-                textbox_talk('Press C to return to Start Menu', color = 'Black', bg_color = 'White', text_size = 100, x = 60, y = 610)
+            
 
-            if self.actions['start']:
+            if self.actions['start'] and not self.actions['controls']:
                 self.level.run()
             
             if fights['creeper1']['fight_begun']:
                 self.combat.run(fights['creeper1']['screen'], fights['creeper1']['enemies'], fights['creeper1']['total_chars'], fights['creeper1']['health_bars'])
             if fights['creeper2']['fight_begun'] and not self.combat.running:
                 self.combat.run(fights['creeper2']['screen'], fights['creeper2']['enemies'], fights['creeper2']['total_chars'], fights['creeper2']['health_bars'])
-
+            if self.actions['controls']:
+                            screen.blit(background, (0, 0))
+                            textbox_talk('Controls:', color = 'Black', bg_color = 'White', text_size = 140, x = 60, y = 10)
+                            textbox_talk('WASD: Movement', color = 'Black', bg_color = 'White', text_size = 100, x = 60, y = 160)
+                            textbox_talk('Arrow Keys: Throw Snowball', color = 'Black', bg_color = 'White', text_size = 100, x = 60, y = 260)
+                            textbox_talk('SPACE: Interact/Talk/Attack', color = 'Black', bg_color = 'White', text_size = 100, x = 60, y = 360)
+                            textbox_talk('LMB: Select Enemy', color = 'Black', bg_color = 'White', text_size = 100, x = 60, y = 460)
+                            textbox_talk('Press C to return', color = 'Black', bg_color = 'White', text_size = 100, x = 360, y = 610)
             pg.display.flip()
             self.clock.tick(FPS)
 

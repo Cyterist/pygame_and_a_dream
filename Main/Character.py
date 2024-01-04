@@ -1,5 +1,7 @@
 import pygame as pg
 from information import *
+from debug import *
+pg.init()
 # Class for creating characters
 
 class Character():
@@ -26,10 +28,13 @@ class Player(Character):
     super.__init__
 
     def attack(self, target, modifier):
-        target.hp -= self.dmg + modifier
-        if target.hp <= 0:
-            target.hp = 0
-            target.alive = False
+        if target is not None:
+            target.hp -= self.dmg + modifier
+            if target.hp <= 0:
+                target.hp = 0
+                target.alive = False
+        elif target is None:
+            print('Warning: Attempted to attack a NoneType object.')
     
 
     
@@ -46,10 +51,11 @@ class Enemy(Character):
     super.__init__
         
     def attack(self, target):
-        target.hp -= self.dmg
-        if target.hp < 1:
-            target.hp = 0
-            target.alive = False
+        if target is not None:
+            target.hp -= self.dmg
+            if target.hp < 1:
+                target.hp = 0
+                target.alive = False
 
 
 
@@ -86,11 +92,13 @@ class SnowMeter():
 
 # CHARACTERS
         
-player = Player(200, 400, 'player', 30, 30, 500)
-creeper = Enemy(850, 390, 'creeper', 30, 30, 25)
+player = Player(200, 400, 'player', 30, 30, 1)
+creeper = Enemy(850, 390, 'creeper', 30, 30, 1)
 creeper2 = Enemy(1050, 390, 'creeper', 30, 30, 1)
+creeper3 = Enemy(850, 390, 'creeper', 30, 30, 1)
 
 player_hp = HealthBar(200, WINDOWHEIGHT - BOTTOM_PANEL + 55, player.hp, player.max_hp)
 creeper_hp = HealthBar(1000, WINDOWHEIGHT - BOTTOM_PANEL + 55, creeper.hp, creeper.max_hp)
 creeper2_hp = HealthBar(1000, WINDOWHEIGHT - BOTTOM_PANEL + 115, creeper2.hp, creeper2.max_hp)
+creeper3_hp = HealthBar(1000, WINDOWHEIGHT - BOTTOM_PANEL + 55, creeper3.hp, creeper3.max_hp)
 player_snow = SnowMeter(200, WINDOWHEIGHT - BOTTOM_PANEL + 115, player.snow, player.max_snow)

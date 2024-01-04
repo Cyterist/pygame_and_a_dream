@@ -1,5 +1,7 @@
 import pygame as pg
+pg.font.init()
 pg.init()
+
 font = pg.font.Font('EquipmentPro.ttf', 52)
 
 
@@ -10,13 +12,26 @@ def debug(info, y=10, x=10):
     pg.draw.rect(display_surface, 'Black', debug_rect)
     display_surface.blit(debug_surf, debug_rect)
 
-def textbox_talk(words, text_size = 10, color = 'White', bg_color = 'Black', x = 600, y = 600):
-    font = pg.font.Font('EquipmentPro.ttf', text_size)
-    display_surface = pg.display.get_surface()
-    textbox_surf = font.render(str(words), True, color)
-    textbox_rect = textbox_surf.get_rect(topleft=(x, y))
-    pg.draw.rect(display_surface, bg_color, textbox_rect)
-    display_surface.blit(textbox_surf, textbox_rect)
+def textbox_talk(words, text_size = 10, color = 'White', bg_color = None, x = 600, y = 600, duration = 0):
+    # duration = 1000 is one second
+    if duration == 0:
+        font = pg.font.Font('EquipmentPro.ttf', text_size)
+        display_surface = pg.display.get_surface()
+        textbox_surf = font.render(str(words), True, color)
+        textbox_rect = textbox_surf.get_rect(topleft=(x, y))
+        if bg_color != None:
+            pg.draw.rect(display_surface, bg_color, textbox_rect)
+        display_surface.blit(textbox_surf, textbox_rect)
+    else:
+        start_time = pg.time.get_ticks()
+        while pg.time.get_ticks() - start_time < duration:
+            font = pg.font.Font('EquipmentPro.ttf', text_size)
+            display_surface = pg.display.get_surface()
+            textbox_surf = font.render(str(words), True, color)
+            textbox_rect = textbox_surf.get_rect(topleft=(x, y))
+            pg.draw.rect(display_surface, bg_color, textbox_rect)
+            display_surface.blit(textbox_surf, textbox_rect)
+
 
 def renderTextCenteredAt(npc_name, text, screen, font = font, color = 'White', x=500, y=650, allowed_width=890, allowed_height = 300):
  # first, split the text into words
@@ -73,3 +88,14 @@ def renderTextCenteredAt(npc_name, text, screen, font = font, color = 'White', x
         screen.blit(font_surface, (tx, ty))
 
         y_offset += fh
+
+def display_text(text, x, y, duration = 1000, color = 'Black'):
+    font = pg.font.Font('EquipmentPro.ttf', 100)
+    display_surface = pg.display.get_surface()
+    text_surface = font.render(text, True, color)
+    text_rect = text_surface.get_rect(center=(x, y))
+
+    start_time = pg.time.get_ticks()
+    print('display_text')
+    while pg.time.get_ticks() - start_time < duration:
+        display_surface.blit(text_surface, text_rect)

@@ -7,8 +7,8 @@ YELLOW = (255, 255, 0)
 
 # easy text creator
 def create_surface_text(text, font_size, text_color):
-    font = pgft.SysFont("Arial", font_size, bold=True)
-    surface, _ = font.render(text=text, fgcolor = text_color, bgcolor=None)
+    font = pg.font.Font("EquipmentPro.ttf", font_size)
+    surface = font.render(text, True, text_color)
     return surface.convert_alpha()
 
 # Class to make UI buttons

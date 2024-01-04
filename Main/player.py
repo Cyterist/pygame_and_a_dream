@@ -212,8 +212,8 @@ class Player(pg.sprite.Sprite):
                                 self.end_talk = True
                                 dialog['d']['npc1line1'] = True
                                 
-                                # self.talking = False
-                                # fights['creeper1']['fight_begun'] = True
+                                self.talking = False
+                                fights['creeper1']['fight_begun'] = True
                     elif fights['creeper1']['fight_won']:
                             fights['creeper1']['fight_begun'] = False
                             self.creeper1 = False
@@ -383,7 +383,6 @@ class Player(pg.sprite.Sprite):
         self.cooldowns()
         self.get_status()
         self.animate()
-        debug(self.status)
 
         # Move the player based on the input
         self.rect.x += self.direction.x * self.speed
