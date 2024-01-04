@@ -11,7 +11,7 @@ def debug(info, y=10, x=10):
     display_surface.blit(debug_surf, debug_rect)
 
 def textbox_talk(words, text_size = 10, color = 'White', bg_color = 'Black', x = 600, y = 600):
-    font = pg.font.Font(None, text_size)
+    font = pg.font.Font('EquipmentPro.ttf', text_size)
     display_surface = pg.display.get_surface()
     textbox_surf = font.render(str(words), True, color)
     textbox_rect = textbox_surf.get_rect(topleft=(x, y))

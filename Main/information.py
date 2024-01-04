@@ -24,7 +24,7 @@ YELLOW = (255, 255, 0)
 # Convert() to speed rendering time.
 background = pg.Surface(screen.get_size())
 background = background.convert()
-background.fill((156, 219, 67))  # Green
+background.fill((255, 255, 255))  # White
 
 
 # End program

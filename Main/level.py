@@ -56,7 +56,7 @@ class Level():
                 'boundary': import_csv_layout('../Main/maps/Level_1/_level_1_floorblocks.csv'),
                 'decorations': import_csv_layout('../Main/maps/Level_1/_level_1_decorations.csv'),
                 'snowman': import_csv_layout('../Main/maps/Level_1/_level_1_desobjects.csv'),
-                # 'object': import_csv_layout('../Main/maps/Level_1/_level_1_objects.csv'),
+                'object': import_csv_layout('../Main/maps/Level_1/_level_1_objects.csv'),
                 # 'enemy': import_csv_layout('../Main/maps/Level_1/_level_1_enemy.csv'),
                 'npc': import_csv_layout('../Main/maps/Level_1/_level_1_npc.csv'),
                 'npc2': import_csv_layout('../Main/maps/Level_1/_level_1_npc2.csv')
@@ -65,7 +65,7 @@ class Level():
             graphics = {
                 'snowman': import_folder('../Main/data/Level_1/snowmen/'),
                 'decorations': import_folder('../Main/data/Level_1/decorations/'),
-                'objects': import_folder('../Main/data/Level_1/objects/'),
+                'objects': pg.image.load('../Main/data/Level_1/objects/bench64.png'),
                 # 'enemy': import_cut_graphics('../Main/data/Level_0/enemy.png'),
                 'npc': pg.image.load('../Main/data/Level_1/sign-post64.png').convert_alpha(),
                 'npc2': pg.image.load('../Main/data/Level_1/Player.png').convert()
@@ -89,7 +89,7 @@ class Level():
                                 Tile((x, y - 64), [self.visible_sprites], 'small_decorations', decorations)
                         if style == 'object':
                             # create object tile
-                            surf = graphics['objects'][int(col)]
+                            surf = graphics['objects']
                             Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'objects', surf)
                         if style == 'snowman':
                             # Add snowman sprites to both snowman_group and obstacle_sprites

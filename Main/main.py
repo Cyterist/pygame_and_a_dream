@@ -13,7 +13,7 @@ class Game:
         self.clock = pg.time.Clock()
         self.level = Level()
         self.combat = Combat()
-        self.actions = {'start' : False, 'end': False, 'combat': False}
+        self.actions = {'start' : False, 'end': False, 'combat': False, 'controls': False}
 
     def run(self):
         while True:
@@ -23,14 +23,26 @@ class Game:
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_RETURN:
                         self.actions['start'] = True
-                    if event.key == pg.K_h and self.actions['start']:
-                        self.actions['combat'] = True
+                    if event.key == pg.K_c:
+                        if self.actions['controls']:
+                            self.actions['controls'] = False
+                        elif self.actions['controls'] == False:
+                            self.actions['controls'] = True
 
             screen.blit(background, (0, 0))
-            textbox_talk('Snowball Chronicles', text_size = 120, bg_color= 'Blue', x = 190, y = 60)
-            textbox_talk('Press the enter button to start.', text_size = 100, x = 120, y = 300)
+            textbox_talk('Snowball Chronicles', color = 'Black', bg_color = 'White', text_size = 140, x = 170, y = 60)
+            textbox_talk('Press C for controls.', color = 'Black', bg_color = 'White', text_size = 100, x = 275, y = 330)
+            textbox_talk('Press the enter button to start.', color = 'Black', bg_color = 'White', text_size = 100, x = 60, y = 530)
             
-            
+            if self.actions['controls'] and not self.actions['start']:
+                screen.blit(background, (0, 0))
+                textbox_talk('Controls:', color = 'Black', bg_color = 'White', text_size = 140, x = 60, y = 10)
+                textbox_talk('WASD: Movement', color = 'Black', bg_color = 'White', text_size = 100, x = 60, y = 160)
+                textbox_talk('Arrow Keys: Throw Snowball', color = 'Black', bg_color = 'White', text_size = 100, x = 60, y = 260)
+                textbox_talk('SPACE: Interact/Talk/Attack', color = 'Black', bg_color = 'White', text_size = 100, x = 60, y = 360)
+                textbox_talk('LMB: Select Enemy', color = 'Black', bg_color = 'White', text_size = 100, x = 60, y = 460)
+                textbox_talk('Press C to return to Start Menu', color = 'Black', bg_color = 'White', text_size = 100, x = 60, y = 610)
+
             if self.actions['start']:
                 self.level.run()
             
