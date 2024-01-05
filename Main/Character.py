@@ -92,7 +92,7 @@ class SnowMeter():
 
 # CHARACTERS
         
-player = Player(200, 400, 'player', 30, 30, 30)
+player = Player(200, 350, 'player', 30, 30, 30)
 creeper = Enemy(850, 390, 'creeper', 30, 30, 1)
 creeper2 = Enemy(1050, 390, 'creeper', 30, 30, 1)
 creeper3 = Enemy(850, 390, 'creeper', 30, 30, 1)

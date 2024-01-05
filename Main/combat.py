@@ -8,7 +8,7 @@ from fights import *
 
 combat_background = pg.image.load('pics/assets/background.png').convert_alpha()
 scaled_bg = pg.transform.scale(
-    combat_background, (combat_background.get_width() * 4, combat_background.get_height() * 4))
+    combat_background, (combat_background.get_width(), combat_background.get_height()))
 panel = pg.image.load('pics/assets/panel.png')
 scaled_panel = pg.transform.scale(
     panel, (panel.get_width() * 3.25, panel.get_height() * 2.3))
