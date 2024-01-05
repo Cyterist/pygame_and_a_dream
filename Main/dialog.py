@@ -79,7 +79,7 @@ def test_dialog(self):
         self.talking = True
         self.talking_cooldown += 1
         renderTextCenteredAt(dialog['npc2']['n'], dialog['npc2']['snow'], screen)
-        if self.talking_cooldown >= self.talking_wait:
+        if self.talking_cooldown >= self.talking_wait + 175:
             self.talking = False
             self.talk = False
             dialog['d']['npc2hit'] = False

@@ -65,10 +65,10 @@ class Level():
             graphics = {
                 'snowman': import_folder('../Main/data/Level_1/snowmen/'),
                 'decorations': import_folder('../Main/data/Level_1/decorations/'),
-                'objects': pg.image.load('../Main/data/Level_1/objects/bench64clean.png'),
+                'objects': import_folder('../Main/data/Level_1/objects/'),
                 # 'enemy': import_cut_graphics('../Main/data/Level_0/enemy.png'),
-                'npc': pg.image.load('../Main/data/Level_1/sign-post64clean.png').convert_alpha(),
-                'npc2': pg.image.load('../Main/data/Level_1/Player.png').convert()
+                'npc': pg.image.load('../Main/data/Level_1/npc/sign-post64clean.png').convert_alpha(),
+                'npc2': pg.image.load('../Main/data/Level_1/npc/Player.png').convert_alpha()
             }
         
         # Draw map and render Tiles
@@ -82,14 +82,14 @@ class Level():
                             Tile((x, y), [self.obstacle_sprites], 'invisible')
                         if style == 'decorations':
                             # Would have to redesign import_folder() to make this work, so the -3 is a placeholder to set it to count the graphics from 0
-                            decorations = graphics['decorations'][int(col) - 3]
-                            if int(col) - 3 == 1:
-                                Tile((x, y - 192), [self.visible_sprites], 'large_decorations', decorations)
-                            if int(col) - 3 == 0:
+                            decorations = graphics['decorations'][int(col)]
+                            if int(col) == 1:
+                                Tile((x, y - 168), [self.visible_sprites], 'large_decorations', decorations)
+                            if int(col) == 0:
                                 Tile((x, y - 64), [self.visible_sprites], 'small_decorations', decorations)
                         if style == 'object':
                             # create object tile
-                            surf = graphics['objects']
+                            surf = graphics['objects'][int(col)]
                             Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'objects', surf)
                         if style == 'snowman':
                             # Add snowman sprites to both snowman_group and obstacle_sprites
