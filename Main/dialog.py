@@ -16,6 +16,7 @@ dialog = {
     },
     'npc2':{
         'n': 'Jimmy',
+        'snow': 'Why would you hit me with a snowball? That was not a kind thing to do.',
         'line1': 'Theme of giving? More like giving up',
         'line2': "You didn't give up!?",
         'line3': "That's it, you're gonna get it if you don't give up!",
@@ -26,6 +27,7 @@ dialog = {
     'd':{
         'npc1Run': False,
         'npc2Run': False,
+        'npc2hit': False,
         'npc1line1': True,
         'npc1line2': False,
         'npc1line3': False,
@@ -69,10 +71,19 @@ def sign_dialog(self):
         if self.talking_cooldown >= self.talking_wait:
             self.end_talk = True
             self.talking_cooldown = 0
-
+    
+    
 def test_dialog(self):
     dialog['d']['npc1Run'] = False
-    if dialog['d']['npc2line1']:
+    if dialog['d']['npc2hit']:
+        self.talking = True
+        self.talking_cooldown += 1
+        renderTextCenteredAt(dialog['npc2']['n'], dialog['npc2']['snow'], screen)
+        if self.talking_cooldown >= self.talking_wait:
+            self.talking = False
+            self.talk = False
+            dialog['d']['npc2hit'] = False
+    elif dialog['d']['npc2line1']:
         self.talking = True
         self.talking_cooldown += 1
         renderTextCenteredAt(dialog['npc2']['n'], dialog['npc2']['line1'], screen)
@@ -180,3 +191,4 @@ def end_conversation(self):
             dialog['d']['npc2line5'] = True
             dialog['d']['npc2line6'] = False
     self.cooldown = 0
+

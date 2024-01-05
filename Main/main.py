@@ -28,6 +28,8 @@ class Game:
                             self.actions['controls'] = False
                         elif self.actions['controls'] == False:
                             self.actions['controls'] = True
+                    if event.key == pg.K_h:
+                         fights['creeper1']['fight_begun'] = True
 
             screen.blit(background, (0, 0))
             textbox_talk('Snowball Chronicles', color = 'Black', bg_color = 'White', text_size = 140, x = 170, y = 60)

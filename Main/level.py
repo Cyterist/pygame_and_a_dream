@@ -65,9 +65,9 @@ class Level():
             graphics = {
                 'snowman': import_folder('../Main/data/Level_1/snowmen/'),
                 'decorations': import_folder('../Main/data/Level_1/decorations/'),
-                'objects': pg.image.load('../Main/data/Level_1/objects/bench64.png'),
+                'objects': pg.image.load('../Main/data/Level_1/objects/bench64clean.png'),
                 # 'enemy': import_cut_graphics('../Main/data/Level_0/enemy.png'),
-                'npc': pg.image.load('../Main/data/Level_1/sign-post64.png').convert_alpha(),
+                'npc': pg.image.load('../Main/data/Level_1/sign-post64clean.png').convert_alpha(),
                 'npc2': pg.image.load('../Main/data/Level_1/Player.png').convert()
             }
         
@@ -143,6 +143,7 @@ class Level():
         # Update snowball position if thrown
         if self.player.snowball.thrown:
             self.player.snowball.update_position(self.obstacle_sprites)
+
         
         self.creeper1 = self.player.creeper1 if not self.combat.running else False
         self.creeper2 = self.player.creeper2 if not self.combat.running else False

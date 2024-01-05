@@ -23,4 +23,4 @@ fights = {
     } 
 }
 
-healthbar_list = fights['creeper1']['health_bars'] + fights['creeper2']['health_bars']   
+healthbar_list = fights['creeper1']['health_bars'] + fights['creeper2']['health_bars']

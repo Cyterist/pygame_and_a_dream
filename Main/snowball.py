@@ -1,5 +1,7 @@
 import pygame as pg
 from information import *
+from debug import *
+from dialog import *
 
 class Snowball(pg.sprite.Sprite):
     def __init__(self, pos, groups, obstacle_sprites):
@@ -14,6 +16,9 @@ class Snowball(pg.sprite.Sprite):
         self.distance_traveled = 0
         self.max_distance = 615  # Adjust as needed
         self.initial_pos = pos
+        self.talking = False
+        self.talking_cooldown = 0
+        self.talking_wait = 1000
 
     def launch_snowball(self):
         if not self.throwing and (self.snowball_time is None or pg.time.get_ticks() - self.snowball_time > self.snowball_cooldown):
@@ -77,3 +82,5 @@ class Snowball(pg.sprite.Sprite):
                 break
             elif sprite.sprite_type == 'enemy' and self.rect.colliderect(sprite.rect):
                 pass
+            elif sprite.sprite_type == 'npc2' and self.rect.colliderect(sprite.rect):
+                dialog['d']['npc2hit'] = True

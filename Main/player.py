@@ -184,89 +184,10 @@ class Player(pg.sprite.Sprite):
                 if sprite.sprite_type == 'npc' and self.rect.colliderect(sprite.rect) and self.talk:
                     dialog['d']['npc1Run'] = True
                     sign_dialog(self)
-                # elif dialog['d']['npc1Run']:
-                #     dialog['d']['npc1Run'] = False
-                    # if dialog['d']['npc1line2'] and not self.end_talk:
-                    #     self.talking = True
-                    #     self.combat_cooldown += 1
-                    #     if self.combat_cooldown <= 251:
-                    #         renderTextCenteredAt(dialog['npc1']['n'], dialog['npc1']['line3'], screen)
-                    #         if self.combat_cooldown >= self.combat_wait:
-                    #             # self.creeper1 = True
-                    #             self.combat_cooldown = 0
-                    #             self.end_talk = True
-                    #             dialog['d']['npc1line3'] = True
-                    # elif dialog['d']['npc1line1'] and not self.end_talk:
-                    #     self.talking = True
-                    #     self.combat_cooldown += 1
-                    #     if self.combat_cooldown <= 251:
-                    #         renderTextCenteredAt(dialog['npc1']['n'], dialog['npc1']['line2'], screen)
-                    #         if self.combat_cooldown >= self.combat_wait:
-                    #             # self.creeper1 = True
-                    #             self.combat_cooldown = 0
-                    #             self.end_talk = True
-                    #             dialog['d']['npc1line2'] = True
-                    # elif not fights['creeper1']['fight_won'] and not dialog['d']['npc1line1']:
-                    #     self.talking = True
-                    #     self.combat_cooldown += 1
-                    #     if self.combat_cooldown <= 251:
-                    #         renderTextCenteredAt(dialog['npc1']['n'], dialog['npc1']['line1'], screen)
-                    #         if self.combat_cooldown >= self.combat_wait:
-                    #             # self.creeper1 = True
-                    #             self.combat_cooldown = 0
-                    #             self.end_talk = True
-                    #             dialog['d']['npc1line1'] = True
-                                
-                    #             self.talking = False
-                    #             fights['creeper1']['fight_begun'] = True
-                    # elif fights['creeper1']['fight_won']:
-                    #         fights['creeper1']['fight_begun'] = False
-                    #         self.creeper1 = False
-                    #         self.combat_cooldown = 0
-                    #         self.talking = True
-                    #         if self.talk:
-                    #             renderTextCenteredAt(dialog['npc1']['n'], dialog['npc1']['line2'], screen)
-                    #             self.end_cooldown += 1
-                    #             if self.end_cooldown > self.end_wait:
-                    #                 self.end_talk = True
 
                 elif sprite.sprite_type == 'npc2' and self.rect.colliderect(sprite.rect) and self.talk:
                     dialog['d']['npc2Run'] = True
                     test_dialog(self)
-                    
-                    # if not fights['creeper2']['fight_won'] and not fights['creeper1']['fight_won']:
-                    #     self.talking = True
-                    #     self.combat_cooldown += 1
-                    #     if self.combat_cooldown <= 251:
-                    #         renderTextCenteredAt('John', dialog['npc2']['line1'], screen)
-                    #         if self.combat_cooldown >= self.combat_wait:
-                    #             self.creeper2 = True
-                    #             self.combat_cooldown = 251
-                    #             self.talk = False
-                    #             self.talking = False
-                    #             fights['creeper2']['fight_begun'] = True
-                    # if fights['creeper1']['fight_won']:
-                    #     fights['creeper1']['fight_begun'] = False
-                    #     self.talking = True
-                    #     self.combat_cooldown += 1
-                    #     if self.combat_cooldown <= 251:
-                    #         renderTextCenteredAt(dialog['npc2']['n'], dialog['npc2']['line1'], screen)
-                    #         if self.combat_cooldown >= self.combat_wait:
-                    #             self.creeper2 = True
-                    #             self.combat_cooldown = 251
-                    #             self.talk = False
-                    #             self.talking = False
-                                
-                    #             fights['creeper2']['fight_begun'] = True
-                                
-                    # if fights['creeper2']['fight_won']:
-                    #         self.combat_cooldown = 0
-                    #         self.talking = True
-                    #         if self.talk:
-                    #             renderTextCenteredAt(dialog['npc2']['n'], dialog['npc2']['line2'], screen)
-                    #             self.end_cooldown += 1
-                    #             if self.end_cooldown > self.end_wait:
-                    #                 self.end_talk = True
 
                             
             

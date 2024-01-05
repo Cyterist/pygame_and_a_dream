@@ -23,8 +23,9 @@ def import_folder(path):
     return surface_list
 
 # Used to use individual tiles from a tileset
-def import_cut_graphics(path):
+def import_cut_graphics(path, scale=1):
     surface = pg.image.load(path).convert_alpha()
+    pg.transform.scale_by(surface, scale)
     
     tile_num_x = int(surface.get_size()[0] / tile_size)
     tile_num_y = int(surface.get_size()[1] / tile_size)
