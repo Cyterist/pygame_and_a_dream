@@ -4,6 +4,7 @@ from bars import *
 from information import *
 from debug import debug
 from fights import *
+import random
 
 
 combat_background = pg.image.load('pics/assets/background.png').convert_alpha()
@@ -12,6 +13,7 @@ scaled_bg = pg.transform.scale(
 panel = pg.image.load('pics/assets/panel.png')
 scaled_panel = pg.transform.scale(
     panel, (panel.get_width() * 3.25, panel.get_height() * 2.3))
+
 
 
 def create_default_screen(screen, enemies):
@@ -83,6 +85,22 @@ class Combat():
         self.end_combat = True
         fights['creeper1']['fight_begun'] = False
         fights['creeper2']['fight_begun'] = False
+    
+    def hawk_combat(self, opponent):
+        enemy = opponent
+        if enemy.name == 'Hawk':
+            attack = random.randint(0, 2)
+            if attack == 0:
+                enemy.attack_type == 'throws a snowball!'
+                print(enemy.attack_type)
+            if attack == 1:
+                enemy.attack_type == 'throws a water balloon!'
+                print(enemy.attack_type)
+            if attack == 2:
+                enemy.attack_type == 'throws a snowball!'
+                print(enemy.attack_type)
+            
+            print(attack)
 
 
     # Main combat function
@@ -99,7 +117,7 @@ class Combat():
             650, 658), font_size=30, text_color=WHITE, text="Ability 1")
         self.collect_btn = UIButton(center_position=(
             650, 558), font_size=30, text_color=WHITE, text="Collect Snow")
-        if fights['creeper1']['fight_begun'] or fights['creeper2']['fight_begun']:
+        if fights['creeper1']['fight_begun'] or fights['creeper2']['fight_begun'] or fights['wolf1']['fight_begun']:
             self.start_combat()
             while self.running and not self.end_combat:
                 create_default_screen(screen, enemies)
@@ -254,13 +272,19 @@ class Combat():
                 for i, enemy in enumerate(enemies):
                     if self.active_char == 2 + i:
                         if enemy.alive:
+                            if not fights['RNG']:
+                                self.hawk_combat(enemy)
+                                fights['RNG'] = True
                             textbox_talk('Enemy Turn!', 50, bg_color=None, x=550, y=0)
-                            # TODO Find absolute reference for enemy health bar location, then input whatever action the enemy takes
-                            healthbar_loc = healthbar_list[i]
-                            textbox_talk('Creeper Attacks!', 30, color='Black', x=healthbar_loc.x - 200, y=healthbar_loc.y - 20)
+                            enemy_x, enemy_y = enemy.rect.center
+                            opp = enemy.name
+                            att = enemy.attack_type
+                            textbox_talk(opp + ' ' + att, 30, color='Black', x=enemy_x - 100, y=enemy_y - 100, bg_color='White')
                             self.cooldown += 1
                             if self.cooldown >= self.wait:
+                                self.hawk_combat(enemy)
                                 enemy.attack(player)
+                                fights['RNG'] = False
                                 self.active_char += 1
                                 self.cooldown = 0
                         else:

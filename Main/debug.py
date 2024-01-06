@@ -12,7 +12,7 @@ def debug(info, y=10, x=10):
     pg.draw.rect(display_surface, 'Black', debug_rect)
     display_surface.blit(debug_surf, debug_rect)
 
-def textbox_talk(words, text_size = 10, color = 'White', bg_color = None, x = 600, y = 600, duration = 0):
+def textbox_talk(words, text_size = 10, color = 'White', bg_color = None, x = 600, y = 600, duration = 0, opp = None):
     # duration = 1000 is one second
     if duration == 0:
         font = pg.font.Font('EquipmentPro.ttf', text_size)
