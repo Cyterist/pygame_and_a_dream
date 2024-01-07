@@ -2,6 +2,8 @@ import pygame as pg
 from information import *
 from debug import *
 from fights import *
+pg.init()
+pg.font.init()
 
 # 'n' is the name of the NPC, d is to represent if the dialog has already been seen
 dialog = {

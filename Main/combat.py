@@ -1,10 +1,10 @@
 from UI_Button import *
-from Character import *
 from bars import *
 from information import *
-from debug import debug
+from debug import *
 from fights import *
 import random
+pg.font.init()
 
 
 combat_background = pg.image.load('pics/assets/background.png').convert_alpha()
@@ -37,10 +37,10 @@ def create_text(text, text_color, font_size, x, y, screen, bgcolor=None):
     screen.blit(image, (x, y))
 
 
-def check_sides(rect):
-    if rect.left <= 350:
+def check_sides():
+    if white_bar.x <= 350:
         return True
-    elif rect.right >= 950:
+    elif white_bar.x >= 950:
         return True
     else:
         return False
@@ -66,7 +66,13 @@ class Combat():
         self.win = False
         self.cooldown = 0
         self.end_combat = False
+        self.contain = False
     
+    def terminate(self):
+        self.ends_combat()
+        pg.quit()
+        sys.exit()
+
     def reset_attack(self):
         self.red = False
         self.green = False
@@ -85,38 +91,60 @@ class Combat():
         self.end_combat = True
         fights['creeper1']['fight_begun'] = False
         fights['creeper2']['fight_begun'] = False
+        fights['wolf1']['fight_begun'] = False
     
+    # Basic combat AI
     def hawk_combat(self, opponent):
         enemy = opponent
         if enemy.name == 'Hawk':
             attack = random.randint(0, 2)
             if attack == 0:
-                enemy.attack_type == 'throws a snowball!'
-                print(enemy.attack_type)
+                fights['attack_type'] = 'throws a snowball!'
+                print(fights['attack_type'])
             if attack == 1:
-                enemy.attack_type == 'throws a water balloon!'
-                print(enemy.attack_type)
+                fights['attack_type'] = 'throws a water balloon!'
+                print(fights['attack_type'])
             if attack == 2:
-                enemy.attack_type == 'throws a snowball!'
-                print(enemy.attack_type)
-            
-            print(attack)
+                fights['attack_type'] = 'throws a snowball!'
+                print(fights['attack_type'])
+    def wolf_combat(self, opponent):
+        enemy = opponent
+        if enemy.name == 'Wolf':
+            attack = random.randint(0, 6)
+            if attack == 0 or attack == 5 or attack == 6:
+                fights['attack_type'] = 'throws a snowball!'
+                print(fights['attack_type'])
+            if attack == 1:
+                fights['attack_type'] = 'throws a water balloon!'
+                print(fights['attack_type'])
+            if attack == 2 or attack == 4:
+                fights['attack_type'] = 'steals some snow!'
+                print(fights['attack_type'])
+            if attack == 3:
+                fights['attack_type'] = 'charges an attack!'
+                print(fights['attack_type'])
+        
 
 
     # Main combat function
 
     def run(self, screen, enemies, total_chars, health_bars):
+        if not fights['RUN']:
+            self.terminate(self)
+        player.hp = player.max_hp
+        player.snow = player.max_snow
+        self.no_snow = False
         if not fights['creeper1']['fight_begun'] and not fights['creeper2']['fight_begun']:
             self.win = False
             self.running = False
             self.cooldown = 0
 
         self.attack_btn = UIButton(center_position=(
-            650, 608), font_size=30, text_color=WHITE, text="Attack")
+            650, 608), font_size=45, text_color=WHITE, text="Snowball")
         self.ability1_btn = UIButton(center_position=(
-            650, 658), font_size=30, text_color=WHITE, text="Ability 1")
+            650, 658), font_size=45, text_color=WHITE, text="Ice Ball COST: 10")
         self.collect_btn = UIButton(center_position=(
-            650, 558), font_size=30, text_color=WHITE, text="Collect Snow")
+            650, 558), font_size=45, text_color=WHITE, text="Collect Snow")
         if fights['creeper1']['fight_begun'] or fights['creeper2']['fight_begun'] or fights['wolf1']['fight_begun']:
             self.start_combat()
             while self.running and not self.end_combat:
@@ -129,7 +157,10 @@ class Combat():
 
                 for event in pg.event.get():
                     if event.type == pg.QUIT:
-                        pg.quit()
+                        self.terminate()
+                    if event.type == pg.KEYDOWN:
+                        if event.key == pg.K_m:
+                            pg.mixer.music.set_volume(0)
                     if event.type == pg.MOUSEBUTTONUP and event.button == 1:
                         self.mouse_up = True
 
@@ -144,11 +175,14 @@ class Combat():
                 # players turn
                 if player.alive:
                     if self.active_char == 1:
-
+                        if player.blind:
+                            textbox_talk('Blinded!', 50, color = 'Red', bg_color=None, x=140, y=260)
                         # Check if action was selection
                         if not self.attack and not self.ability_1:
-
-                            # create_text("Your Turn", WHITE, 50, 550, 0, screen)
+                            if player.name == 'player_throw':
+                                print(player.name)
+                                player.name = 'player'
+                                player.image = pg.image.load(f'pics/{player.name}/default.png')
                             textbox_talk('Your Turn!', 50, bg_color=None, x=550, y=0)
 
                             if self.attack_btn.clicked(self.mouse_pos, self.mouse_up):
@@ -156,6 +190,11 @@ class Combat():
 
                             if self.ability1_btn.clicked(self.mouse_pos, self.mouse_up) and player.snow >= 10:
                                 self.ability_1 = True
+                            elif self.ability1_btn.clicked(self.mouse_pos, self.mouse_up):
+                                self.no_snow = True
+                            elif self.no_snow:
+                                textbox_talk('Not Enough Snow!', 50, bg_color=None, x=550, y=50)
+
 
                             if self.collect_btn.clicked(self.mouse_pos, self.mouse_up):
                                 player.collect_snow()
@@ -163,7 +202,6 @@ class Combat():
 
                         if self.attack or self.ability_1:
                             textbox_talk('Select Target', 50, bg_color=None, x=550, y=0)
-                            # create_text("Select Target", WHITE, 50, 550, 0, screen)
                             for enemy in enemies:
                                 if enemy.rect.collidepoint(self.mouse_pos) and self.mouse_up and enemy.alive:
                                     self.target = enemy
@@ -171,22 +209,45 @@ class Combat():
                         if self.attack == True and self.target != None:
                             for bar in attack_bars:
                                 bar.draw(screen)
-
-                            if self.white_bar_speed == 0:
-                                self.white_bar_speed = 1
-
+                            if player.blind and not self.contain:
+                                self.white_bar_speed = 14
+                            if not player.blind and not self.contain:
+                                self.white_bar_speed = 6
                             white_bar.x += self.white_bar_speed
                             pg.draw.rect(screen, WHITE, white_bar)
-                            self.side = check_sides(white_bar)
-                            if self.side:
-                                self.white_bar_speed *= -1
+                            self.side = check_sides()
+                            if player.blind:
+                                if white_bar.x > 950 or white_bar.x < 350:
+                                    print('speed reversed and blind')
+                                    self.contain = True
+                                    self.white_bar_speed *= -1
+                                    if white_bar.x > 1100 or white_bar.x < 200:
+                                        white_bar.x = 400
+                            else:
+                                if self.side or white_bar.x > 950 or white_bar.x < 350:
+                                    self.contain = True
+                                    print(f'speed reversed and not blind {self.white_bar_speed}')
+                                    self.white_bar_speed *= -1
+                                    if white_bar.x > 1100 or white_bar.x < 200:
+                                        white_bar.x = 400
+                                
                             if keys[pg.K_SPACE]:
+                                self.contain = False
+                                if player.blind:
+                                    player.blind = False
                                 if attack_y1.check_collision(white_bar) or attack_y2.check_collision(white_bar):
                                     self.yellow = True
                                 if attack_r1.check_collision(white_bar) or attack_r2.check_collision(white_bar):
                                     self.red = True
                                 if attack_g.check_collision(white_bar):
                                     self.green = True
+                                if not self.green and not self.yellow and not self.red:
+                                    player.attack(self.target, 1)
+                                    self.reset_attack()
+                                    self.target = None
+                                    white_bar.x = 350
+                                    self.attack = False
+                                    self.active_char += 1
 
                             if self.red == True and not self.yellow:
                                 player.attack(self.target, 0)
@@ -196,28 +257,28 @@ class Combat():
                                 self.attack = False
                                 self.active_char += 1
                             if self.yellow == True and not self.green:
-                                player.attack(self.target, 3)
+                                player.attack(self.target, 1)
                                 self.reset_attack()
                                 self.target = None
                                 white_bar.x = 350
                                 self.attack = False
                                 self.active_char += 1
                             if self.green == True and not self.yellow:
-                                player.attack(self.target, 10)
+                                player.attack(self.target, 1.5)
                                 self.reset_attack()
                                 self.target = None
                                 white_bar.x = 350
                                 self.attack = False
                                 self.active_char += 1
                             if self.red and self.yellow:
-                                player.attack(self.target, 3)
+                                player.attack(self.target, 0.5)
                                 self.reset_attack()
                                 self.target = None
                                 white_bar.x = 350
                                 self.attack = False
                                 self.active_char += 1
                             if self.yellow and self.green:
-                                player.attack(self.target, 10)
+                                player.attack(self.target, 1.25)
                                 self.reset_attack()
                                 self.target = None
                                 white_bar.x = 350
@@ -225,19 +286,37 @@ class Combat():
                                 self.active_char += 1
 
 
+
                         if self.ability_1 == True and self.target != None:
                             for bar in hard_bars:
                                 bar.draw(screen)
-
-                            if self.white_bar_speed == 0:
-                                self.white_bar_speed = 4
-
+                            if player.blind and not self.contain:
+                                self.white_bar_speed = 14
+                            if not player.blind and not self.contain:
+                                self.white_bar_speed = 9
                             white_bar.x += self.white_bar_speed
                             pg.draw.rect(screen, WHITE, white_bar)
-                            self.side = check_sides(white_bar)
-                            if self.side:
-                                self.white_bar_speed *= -1
+                            self.side = check_sides()
+                            if player.blind:
+                                if white_bar.x > 950 or white_bar.x < 350:
+                                    self.white_bar_speed = 14
+                                    print('speed reversed and blind')
+                                    self.contain = True
+                                    self.white_bar_speed *= -1
+                                    if white_bar.x > 1100 or white_bar.x < 200:
+                                        white_bar.x = 400
+                            else:
+                                if self.side or white_bar.x > 950 or white_bar.x < 350:
+                                    self.contain = True
+                                    print(f'speed reversed and not blind {self.white_bar_speed}')
+                                    self.white_bar_speed *= -1
+                                    if white_bar.x > 1100 or white_bar.x < 200:
+                                        white_bar.x = 400
+                                
                             if keys[pg.K_SPACE]:
+                                self.contain = False
+                                if player.blind:
+                                    player.blind = False
                                 if attack_y1.check_collision(white_bar) or attack_y2.check_collision(white_bar):
                                     self.yellow = True
                                 if attack_r1.check_collision(white_bar) or attack_r2.check_collision(white_bar):
@@ -245,26 +324,40 @@ class Combat():
                                 if attack_g.check_collision(white_bar):
                                     self.green = True
 
-                            if self.red == True:
-                                player.harder_hitting_ability(self.target, 0)
-                                self.red = False
+                            if self.red == True and not self.yellow:
+                                player.harder_hitting_ability(self.target, 0.25)
+                                self.reset_attack()
                                 self.target = None
                                 white_bar.x = 350
-                                self.ability_1 = False
+                                self.attack = False
                                 self.active_char += 1
-                            elif self.yellow == True:
-                                player.harder_hitting_ability(self.target, 3)
-                                self.yellow = False
+                            if self.yellow == True and not self.green:
+                                player.harder_hitting_ability(self.target, 1.25)
+                                self.reset_attack()
                                 self.target = None
                                 white_bar.x = 350
-                                self.ability_1 = False
+                                self.attack = False
                                 self.active_char += 1
-                            elif self.green == True:
-                                player.harder_hitting_ability(self.target, 10)
-                                self.green = False
+                            if self.green == True and not self.yellow:
+                                player.harder_hitting_ability(self.target, 1.85)
+                                self.reset_attack()
                                 self.target = None
                                 white_bar.x = 350
-                                self.ability_1 = False
+                                self.attack = False
+                                self.active_char += 1
+                            if self.red and self.yellow:
+                                player.harder_hitting_ability(self.target, 1.25)
+                                self.reset_attack()
+                                self.target = None
+                                white_bar.x = 350
+                                self.attack = False
+                                self.active_char += 1
+                            if self.yellow and self.green:
+                                player.harder_hitting_ability(self.target, 1.75)
+                                self.reset_attack()
+                                self.target = None
+                                white_bar.x = 350
+                                self.attack = False
                                 self.active_char += 1
 
                 # Enemy Turn
@@ -274,15 +367,16 @@ class Combat():
                         if enemy.alive:
                             if not fights['RNG']:
                                 self.hawk_combat(enemy)
+                                self.wolf_combat(enemy)
                                 fights['RNG'] = True
+                                print(f" {enemy.name} {fights['attack_type']}")
                             textbox_talk('Enemy Turn!', 50, bg_color=None, x=550, y=0)
                             enemy_x, enemy_y = enemy.rect.center
                             opp = enemy.name
-                            att = enemy.attack_type
+                            att = fights['attack_type']
                             textbox_talk(opp + ' ' + att, 30, color='Black', x=enemy_x - 100, y=enemy_y - 100, bg_color='White')
                             self.cooldown += 1
                             if self.cooldown >= self.wait:
-                                self.hawk_combat(enemy)
                                 enemy.attack(player)
                                 fights['RNG'] = False
                                 self.active_char += 1
@@ -325,6 +419,7 @@ class Combat():
                         self.loss = True
                         self.combat = False
                         self.ends_combat()
+                        self.terminate()
                     
 
 
@@ -337,6 +432,8 @@ class Combat():
                             fights['creeper1']['fight_won'] = True
                         if fights['creeper2']['fight_begun']:
                             fights['creeper2']['fight_won'] = True
+                        if fights['wolf1']['fight_begun']:
+                            fights['wolf1']['fight_won'] = True
                         self.combat = False
                         self.win = False
                         self.ends_combat()

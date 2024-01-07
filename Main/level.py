@@ -6,6 +6,7 @@ from snowball import Snowball
 from debug import *
 from support import *
 from combat import Combat
+pg.font.init()
 
 
 class Level():
@@ -99,6 +100,7 @@ class Level():
                         #     enemy_tile = graphics['enemy'][int(col)]
                         #     enemy = Enemy((x, y), [self.visible_sprites, self.obstacle_sprites], enemy_tile)
                         #     self.enemy_group.append(enemy)
+                        
                         if style == 'npc':
                             npc_tile = graphics['npc']
                             Tile((x, y), [self.visible_sprites, self.snowman_group, self.obstacle_sprites], 'npc', npc_tile)
@@ -108,8 +110,8 @@ class Level():
         
 
         # Initialize snowball and player sprites
-        self.player = Player((5504, 4096), [self.visible_sprites], self.obstacle_sprites, self.snowman_group, self)
-        self.snowball = Snowball((-1000, -1000), [self.visible_sprites], self.obstacle_sprites)
+        self.player = Player((7360, 604), [self.visible_sprites], self.obstacle_sprites, self.snowman_group, self)
+        self.snowball = Snowball((-10000, -10000), [self.visible_sprites], self.obstacle_sprites)
 
         self.player.snowball = self.snowball
 

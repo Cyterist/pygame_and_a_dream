@@ -1,11 +1,13 @@
 import pygame as pg
-pg.font.init()
-pg.init()
 
-font = pg.font.Font('EquipmentPro.ttf', 52)
+pg.init()
+pg.font.init()
+
 
 
 def debug(info, y=10, x=10):
+    pg.font.init()
+    font = pg.font.Font('EquipmentPro.ttf', 52)
     display_surface = pg.display.get_surface()
     debug_surf = font.render(str(info), True, 'White')
     debug_rect = debug_surf.get_rect(topleft=(x, y))
@@ -13,27 +15,22 @@ def debug(info, y=10, x=10):
     display_surface.blit(debug_surf, debug_rect)
 
 def textbox_talk(words, text_size = 10, color = 'White', bg_color = None, x = 600, y = 600, duration = 0, opp = None):
+    pg.font.init()
     # duration = 1000 is one second
     if duration == 0:
         font = pg.font.Font('EquipmentPro.ttf', text_size)
         display_surface = pg.display.get_surface()
-        textbox_surf = font.render(str(words), True, color)
-        textbox_rect = textbox_surf.get_rect(topleft=(x, y))
-        if bg_color != None:
-            pg.draw.rect(display_surface, bg_color, textbox_rect)
-        display_surface.blit(textbox_surf, textbox_rect)
-    else:
-        start_time = pg.time.get_ticks()
-        while pg.time.get_ticks() - start_time < duration:
-            font = pg.font.Font('EquipmentPro.ttf', text_size)
-            display_surface = pg.display.get_surface()
+        if display_surface != None:
             textbox_surf = font.render(str(words), True, color)
             textbox_rect = textbox_surf.get_rect(topleft=(x, y))
-            pg.draw.rect(display_surface, bg_color, textbox_rect)
+            if bg_color != None:
+                pg.draw.rect(display_surface, bg_color, textbox_rect)
             display_surface.blit(textbox_surf, textbox_rect)
 
 
-def renderTextCenteredAt(npc_name, text, screen, font = font, color = 'White', x=500, y=650, allowed_width=890, allowed_height = 300):
+def renderTextCenteredAt(npc_name, text, screen, color = 'White', x=500, y=650, allowed_width=890, allowed_height = 300):
+    pg.font.init()
+    font = pg.font.Font('EquipmentPro.ttf', 52)
  # first, split the text into words
     words = text.split()
 
@@ -90,6 +87,7 @@ def renderTextCenteredAt(npc_name, text, screen, font = font, color = 'White', x
         y_offset += fh
 
 def display_text(text, x, y, duration = 1000, color = 'Black'):
+    pg.font.init()
     font = pg.font.Font('EquipmentPro.ttf', 100)
     display_surface = pg.display.get_surface()
     text_surface = font.render(text, True, color)

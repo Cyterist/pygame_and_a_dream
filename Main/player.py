@@ -6,6 +6,7 @@ from debug import *
 from combat import *
 from fights import *
 from dialog import *
+pg.font.init()
 
 class Player(pg.sprite.Sprite):
 

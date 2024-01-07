@@ -1,5 +1,6 @@
 from timing import *
 from information import *
+pg.font.init()
 
 TOTAL_BAR = 600
 
