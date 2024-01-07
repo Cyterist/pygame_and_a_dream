@@ -71,7 +71,7 @@ class Enemy(Character):
             if target.hp < 1:
                 target.hp = 0
                 target.alive = False
-        elif fights['attack_type'] == 'steals some snow!':
+        elif fights['attack_type'] == 'steals some snow!' and target.snow > 0:
             snow_amt = random.randint(2, 3)
             snow_steal = int(target.snow / snow_amt)
             target.snow -= snow_steal

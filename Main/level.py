@@ -59,8 +59,9 @@ class Level():
                 'snowman': import_csv_layout('../Main/maps/Level_1/_level_1_desobjects.csv'),
                 'object': import_csv_layout('../Main/maps/Level_1/_level_1_objects.csv'),
                 # 'enemy': import_csv_layout('../Main/maps/Level_1/_level_1_enemy.csv'),
-                'npc': import_csv_layout('../Main/maps/Level_1/_level_1_npc.csv'),
-                'npc2': import_csv_layout('../Main/maps/Level_1/_level_1_npc2.csv')
+                'jack': import_csv_layout('../Main/maps/Level_1/_level_1_jack.csv'),
+                'npc2': import_csv_layout('../Main/maps/Level_1/_level_1_npc2.csv'),
+                'npc3': import_csv_layout('../Main/maps/Level_1/_level_1_npc3.csv')
             }
             # Tile graphics
             graphics = {
@@ -68,8 +69,9 @@ class Level():
                 'decorations': import_folder('../Main/data/Level_1/decorations/'),
                 'objects': import_folder('../Main/data/Level_1/objects/'),
                 # 'enemy': import_cut_graphics('../Main/data/Level_0/enemy.png'),
-                'npc': pg.image.load('../Main/data/Level_1/npc/sign-post64clean.png').convert_alpha(),
-                'npc2': pg.image.load('../Main/data/Level_1/npc/Player.png').convert_alpha()
+                'jack': pg.image.load('../Main/data/Level_1/npc/3.png').convert_alpha(),
+                'npc2': pg.image.load('../Main/data/Level_1/npc/4.png').convert_alpha(),
+                'npc3': pg.image.load('../Main/data/Level_1/npc/2.png').convert_alpha()
             }
         
         # Draw map and render Tiles
@@ -101,16 +103,22 @@ class Level():
                         #     enemy = Enemy((x, y), [self.visible_sprites, self.obstacle_sprites], enemy_tile)
                         #     self.enemy_group.append(enemy)
                         
-                        if style == 'npc':
-                            npc_tile = graphics['npc']
-                            Tile((x, y), [self.visible_sprites, self.snowman_group, self.obstacle_sprites], 'npc', npc_tile)
+                        if style == 'jack':
+                            jack_tile = graphics['jack']
+                            Tile((x, y), [self.visible_sprites, self.snowman_group, self.obstacle_sprites], 'jack', jack_tile)
                         if style == 'npc2':
                             npc2_tile = graphics['npc2']
                             Tile((x, y), [self.visible_sprites, self.snowman_group, self.obstacle_sprites], 'npc2', npc2_tile)
+                        if style == 'npc3':
+                            npc3_tile = graphics['npc3']
+                            Tile((x, y), [self.visible_sprites, self.snowman_group, self.obstacle_sprites], 'npc3', npc3_tile)
+                        if style == 'npc4':
+                            npc4_tile = graphics['npc4']
+                            Tile((x, y), [self.visible_sprites, self.snowman_group, self.obstacle_sprites], 'npc4', npc4_tile)
         
 
         # Initialize snowball and player sprites
-        self.player = Player((7360, 604), [self.visible_sprites], self.obstacle_sprites, self.snowman_group, self)
+        self.player = Player((6360, 604), [self.visible_sprites], self.obstacle_sprites, self.snowman_group, self)
         self.snowball = Snowball((-10000, -10000), [self.visible_sprites], self.obstacle_sprites)
 
         self.player.snowball = self.snowball

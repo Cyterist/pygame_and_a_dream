@@ -182,13 +182,16 @@ class Player(pg.sprite.Sprite):
             for sprite in self.obstacle_sprites:
                 # if sprite.sprite_type == 'enemy' and self.rect.colliderect(sprite.rect):
                 #     pass
-                if sprite.sprite_type == 'npc' and self.rect.colliderect(sprite.rect) and self.talk:
-                    dialog['d']['npc1Run'] = True
-                    sign_dialog(self)
+                if sprite.sprite_type == 'jack' and self.rect.colliderect(sprite.rect) and self.talk:
+                    dialog['d']['jackRun'] = True
+                    jack_dialog(self)
 
                 elif sprite.sprite_type == 'npc2' and self.rect.colliderect(sprite.rect) and self.talk:
                     dialog['d']['npc2Run'] = True
-                    test_dialog(self)
+                    npc2_dialog(self)
+                elif sprite.sprite_type == 'npc3' and self.rect.colliderect(sprite.rect) and self.talk:
+                    dialog['d']['npc3Run'] = True
+                    npc3_dialog(self)
 
                             
             

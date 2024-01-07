@@ -174,6 +174,8 @@ class Combat():
 
                 # players turn
                 if player.alive:
+                    if player.snow < 0:
+                        player.snow = 0
                     if self.active_char == 1:
                         if player.blind:
                             textbox_talk('Blinded!', 50, color = 'Red', bg_color=None, x=140, y=260)
@@ -202,6 +204,7 @@ class Combat():
 
                         if self.attack or self.ability_1:
                             textbox_talk('Select Target', 50, bg_color=None, x=550, y=0)
+                            self.click = True
                             for enemy in enemies:
                                 if enemy.rect.collidepoint(self.mouse_pos) and self.mouse_up and enemy.alive:
                                     self.target = enemy
@@ -218,7 +221,6 @@ class Combat():
                             self.side = check_sides()
                             if player.blind:
                                 if white_bar.x > 950 or white_bar.x < 350:
-                                    print('speed reversed and blind')
                                     self.contain = True
                                     self.white_bar_speed *= -1
                                     if white_bar.x > 1100 or white_bar.x < 200:
@@ -226,7 +228,6 @@ class Combat():
                             else:
                                 if self.side or white_bar.x > 950 or white_bar.x < 350:
                                     self.contain = True
-                                    print(f'speed reversed and not blind {self.white_bar_speed}')
                                     self.white_bar_speed *= -1
                                     if white_bar.x > 1100 or white_bar.x < 200:
                                         white_bar.x = 400
@@ -329,35 +330,35 @@ class Combat():
                                 self.reset_attack()
                                 self.target = None
                                 white_bar.x = 350
-                                self.attack = False
+                                self.ability_1 = False
                                 self.active_char += 1
                             if self.yellow == True and not self.green:
                                 player.harder_hitting_ability(self.target, 1.25)
                                 self.reset_attack()
                                 self.target = None
                                 white_bar.x = 350
-                                self.attack = False
+                                self.ability_1 = False
                                 self.active_char += 1
                             if self.green == True and not self.yellow:
                                 player.harder_hitting_ability(self.target, 1.85)
                                 self.reset_attack()
                                 self.target = None
                                 white_bar.x = 350
-                                self.attack = False
+                                self.ability_1 = False
                                 self.active_char += 1
                             if self.red and self.yellow:
                                 player.harder_hitting_ability(self.target, 1.25)
                                 self.reset_attack()
                                 self.target = None
                                 white_bar.x = 350
-                                self.attack = False
+                                self.ability_1 = False
                                 self.active_char += 1
                             if self.yellow and self.green:
                                 player.harder_hitting_ability(self.target, 1.75)
                                 self.reset_attack()
                                 self.target = None
                                 white_bar.x = 350
-                                self.attack = False
+                                self.ability_1 = False
                                 self.active_char += 1
 
                 # Enemy Turn
