@@ -61,7 +61,8 @@ class Level():
                 # 'enemy': import_csv_layout('../Main/maps/Level_1/_level_1_enemy.csv'),
                 'jack': import_csv_layout('../Main/maps/Level_1/_level_1_jack.csv'),
                 'npc2': import_csv_layout('../Main/maps/Level_1/_level_1_npc2.csv'),
-                'npc3': import_csv_layout('../Main/maps/Level_1/_level_1_npc3.csv')
+                'npc3': import_csv_layout('../Main/maps/Level_1/_level_1_npc3.csv'),
+                'npc4': import_csv_layout('../Main/maps/Level_1/_level_1_npc4.csv')
             }
             # Tile graphics
             graphics = {
@@ -71,7 +72,8 @@ class Level():
                 # 'enemy': import_cut_graphics('../Main/data/Level_0/enemy.png'),
                 'jack': pg.image.load('../Main/data/Level_1/npc/3.png').convert_alpha(),
                 'npc2': pg.image.load('../Main/data/Level_1/npc/4.png').convert_alpha(),
-                'npc3': pg.image.load('../Main/data/Level_1/npc/2.png').convert_alpha()
+                'npc3': pg.image.load('../Main/data/Level_1/npc/2.png').convert_alpha(),
+                'npc4': pg.image.load('../Main/data/Level_1/npc/5.png').convert_alpha()
             }
         
         # Draw map and render Tiles
@@ -118,7 +120,7 @@ class Level():
         
 
         # Initialize snowball and player sprites
-        self.player = Player((6360, 604), [self.visible_sprites], self.obstacle_sprites, self.snowman_group, self)
+        self.player = Player((5248, 768), [self.visible_sprites], self.obstacle_sprites, self.snowman_group, self)
         self.snowball = Snowball((-10000, -10000), [self.visible_sprites], self.obstacle_sprites)
 
         self.player.snowball = self.snowball

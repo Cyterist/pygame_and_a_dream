@@ -15,6 +15,7 @@ class Character():
         self.hp = max_hp
         self.snow = max_snow
         self.alive = True
+        self.combat_throw = False
         self.image = pg.image.load(f'pics/{self.name}/default.png')
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
@@ -31,8 +32,8 @@ class Player(Character):
     super.__init__
 
     def attack(self, target, modifier):
-        self.name = 'player_throw'
-        self.image = pg.image.load(f'pics/{self.name}/default.png')
+        self.combat_throw = 'True'
+        self.image = pg.image.load(f'pics/player_throw/default.png')
         self.draw(screen)
         if target is not None:
             target.hp -= int(self.dmg * modifier)
@@ -46,6 +47,9 @@ class Player(Character):
     
     def harder_hitting_ability(self, target, modifier):
         if target is not None:
+            self.combat_throw = 'True'
+            self.image = pg.image.load(f'pics/player_throw/default.png')
+            self.draw(screen)
             target.hp -= int(self.dmg * modifier)
             self.snow -= 10
             if target.hp < 1:
@@ -59,31 +63,37 @@ class Enemy(Character):
         
     def attack(self, target):
         if fights['attack_type'] == 'throws a snowball!':
-            print('snowball attack')
             target.hp -= self.dmg
             if target.hp < 1:
                 target.hp = 0
                 target.alive = False
-        elif fights['attack_type'] == 'throws a water balloon!':
-            print('water balloon attack')
+        elif fights['attack_type'] == 'throws a water balloon!' and not target.blind:
             target.hp -= int((self.dmg / 2) - 1)
             target.blind = True
             if target.hp < 1:
                 target.hp = 0
                 target.alive = False
-        elif fights['attack_type'] == 'steals some snow!' and target.snow > 0:
+        elif fights['attack_type'] == 'steals some snow!' and target.snow >= 10:
             snow_amt = random.randint(2, 3)
             snow_steal = int(target.snow / snow_amt)
             target.snow -= snow_steal
-            print('snow stealing attack')
             target.hp -= snow_amt
             if target.hp < 1:
                 target.hp = 0
                 target.alive = False
         elif fights['attack_type'] == 'charges an attack!':
-            print(self.dmg)
             self.dmg += 5
-            print(self.dmg)
+        elif fights['attack_type'] == 'throws an ice ball!':
+            target.hp -= self.dmg + 4
+            if target.hp < 1:
+                target.hp = 0
+                target.alive = False
+        else:
+            fights['attack_type'] = 'throws a snowball!'
+            target.hp -= self.dmg
+            if target.hp < 1:
+                target.hp = 0
+                target.alive = False
     
             
 
@@ -126,14 +136,14 @@ class SnowMeter():
 
 # CHARACTERS
         
-player = Player(200, 350, 'player', 30, 20, 9)
-creeper = Enemy(850, 350, 'Hawk', 30, 30, 1)
-creeper2 = Enemy(850, 350, 'Hawk', 30, 30, 6)
+player = Player(200, 350, 'player', 30, 20, 10)
+creeper = Enemy(950, 350, 'Harold', 40, 30, 9)
+creeper2 = Enemy(850, 350, 'Hawk', 30, 30, 5)
 creeper3 = Enemy(1050, 350, 'Hawk', 30, 30, 6)
-wolf = Enemy(850, 290, 'Wolf', 50, 30, 8)
+wolf = Enemy(850, 290, 'Wolf', 55, 30, 9)
 
 player_hp = HealthBar(200, WINDOWHEIGHT - BOTTOM_PANEL + 55, player.hp, player.max_hp)
-creeper_hp = HealthBar(1000, WINDOWHEIGHT - BOTTOM_PANEL + 15, creeper.hp, creeper.max_hp)
+creeper_hp = HealthBar(1000, WINDOWHEIGHT - BOTTOM_PANEL + 55, creeper.hp, creeper.max_hp)
 creeper2_hp = HealthBar(1000, WINDOWHEIGHT - BOTTOM_PANEL + 55, creeper2.hp, creeper2.max_hp)
 creeper3_hp = HealthBar(1000, WINDOWHEIGHT - BOTTOM_PANEL + 115, creeper3.hp, creeper3.max_hp)
 wolf_hp = HealthBar(1000, WINDOWHEIGHT - BOTTOM_PANEL + 55, wolf.hp, wolf.max_hp)
@@ -141,6 +151,7 @@ wolf_hp = HealthBar(1000, WINDOWHEIGHT - BOTTOM_PANEL + 55, wolf.hp, wolf.max_hp
 player_snow = SnowMeter(200, WINDOWHEIGHT - BOTTOM_PANEL + 115, player.snow, player.max_snow)
 
 fights = {
+    'END': False,
     'RUN': True,
     'RNG': False,
     'Blind': False,
@@ -168,5 +179,5 @@ fights = {
         'health_bars': [creeper2_hp, creeper3_hp],
         'fight_begun': False,
         'fight_won': False
-    } 
+    }
 }

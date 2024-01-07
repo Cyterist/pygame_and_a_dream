@@ -192,6 +192,9 @@ class Player(pg.sprite.Sprite):
                 elif sprite.sprite_type == 'npc3' and self.rect.colliderect(sprite.rect) and self.talk:
                     dialog['d']['npc3Run'] = True
                     npc3_dialog(self)
+                elif sprite.sprite_type == 'npc4' and self.rect.colliderect(sprite.rect) and self.talk:
+                    dialog['d']['npc4Run'] = True
+                    npc4_dialog(self)
 
                             
             

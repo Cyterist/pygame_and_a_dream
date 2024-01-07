@@ -100,29 +100,34 @@ class Combat():
             attack = random.randint(0, 2)
             if attack == 0:
                 fights['attack_type'] = 'throws a snowball!'
-                print(fights['attack_type'])
             if attack == 1:
                 fights['attack_type'] = 'throws a water balloon!'
-                print(fights['attack_type'])
             if attack == 2:
                 fights['attack_type'] = 'throws a snowball!'
-                print(fights['attack_type'])
     def wolf_combat(self, opponent):
         enemy = opponent
         if enemy.name == 'Wolf':
             attack = random.randint(0, 6)
             if attack == 0 or attack == 5 or attack == 6:
                 fights['attack_type'] = 'throws a snowball!'
-                print(fights['attack_type'])
             if attack == 1:
                 fights['attack_type'] = 'throws a water balloon!'
-                print(fights['attack_type'])
             if attack == 2 or attack == 4:
                 fights['attack_type'] = 'steals some snow!'
-                print(fights['attack_type'])
             if attack == 3:
                 fights['attack_type'] = 'charges an attack!'
-                print(fights['attack_type'])
+    def harold_combat(self, opponent):
+        enemy = opponent
+        if enemy.name == 'Harold':
+            attack = random.randint(0, 6)
+            if attack == 0 or attack == 5 or attack == 6:
+                fights['attack_type'] = 'throws a snowball!'
+            if attack == 1:
+                fights['attack_type'] = 'throws an ice ball!'
+            if attack == 2:
+                fights['attack_type'] = 'steals some snow!'
+            if attack == 3 or attack == 4:
+                fights['attack_type'] = 'charges an attack!'        
         
 
 
@@ -181,8 +186,7 @@ class Combat():
                             textbox_talk('Blinded!', 50, color = 'Red', bg_color=None, x=140, y=260)
                         # Check if action was selection
                         if not self.attack and not self.ability_1:
-                            if player.name == 'player_throw':
-                                print(player.name)
+                            if player.combat_throw:
                                 player.name = 'player'
                                 player.image = pg.image.load(f'pics/{player.name}/default.png')
                             textbox_talk('Your Turn!', 50, bg_color=None, x=550, y=0)
@@ -301,15 +305,13 @@ class Combat():
                             if player.blind:
                                 if white_bar.x > 950 or white_bar.x < 350:
                                     self.white_bar_speed = 14
-                                    print('speed reversed and blind')
                                     self.contain = True
                                     self.white_bar_speed *= -1
-                                    if white_bar.x > 1100 or white_bar.x < 200:
+                                    if white_bar.x > 1200 or white_bar.x < 100:
                                         white_bar.x = 400
                             else:
                                 if self.side or white_bar.x > 950 or white_bar.x < 350:
                                     self.contain = True
-                                    print(f'speed reversed and not blind {self.white_bar_speed}')
                                     self.white_bar_speed *= -1
                                     if white_bar.x > 1100 or white_bar.x < 200:
                                         white_bar.x = 400
@@ -369,8 +371,8 @@ class Combat():
                             if not fights['RNG']:
                                 self.hawk_combat(enemy)
                                 self.wolf_combat(enemy)
+                                self.harold_combat(enemy)
                                 fights['RNG'] = True
-                                print(f" {enemy.name} {fights['attack_type']}")
                             textbox_talk('Enemy Turn!', 50, bg_color=None, x=550, y=0)
                             enemy_x, enemy_y = enemy.rect.center
                             opp = enemy.name

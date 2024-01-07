@@ -82,11 +82,6 @@ class Game:
                             self.actions['controls'] = False
                         elif self.actions['controls'] == False:
                             self.actions['controls'] = True
-                    if event.key == pg.K_LEFTBRACKET:
-                        if self.actions['END']:
-                            self.actions['END'] = False
-                        elif self.actions['END'] == False:
-                            self.actions['END'] = True
                     if event.key == pg.K_m:
                         if self.mute:
                             self.mute = False
@@ -103,7 +98,8 @@ class Game:
             textbox_talk('Press C for controls', color = 'Black', bg_color = 'White', text_size = 100, x = 275, y = 330)
             textbox_talk('Press the enter button to start', color = 'Black', bg_color = 'White', text_size = 100, x = 60, y = 530)
             
-            
+            if fights['END']:
+                self.actions['END'] = True
 
             if self.actions['start'] and not self.actions['controls']:
                 
@@ -112,7 +108,7 @@ class Game:
             # if not fights['creeper1']['fight_begun'] and not fights['creeper2']['fight_begun'] and not fights['wolf1']['fight_begun']:
             #     self.play_game_music()
             if fights['RUN']:
-                if fights['creeper1']['fight_begun']:
+                if fights['creeper1']['fight_begun'] and not self.combat.running:
                     self.play_fight_music()
                     self.combat.run(screen, fights['creeper1']['enemies'], fights['creeper1']['total_chars'], fights['creeper1']['health_bars'])
                     self.stop_music()
